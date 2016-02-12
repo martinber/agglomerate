@@ -38,7 +38,7 @@ setup(
 
     entry_points = {
         'console_scripts': [
-            'agglomerate=agglomerate.scripts.shell:main',
+            'agglomerate=agglomerate.scripts.agglomerate:main',
         ],
     },
 
