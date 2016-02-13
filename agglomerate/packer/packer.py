@@ -5,6 +5,6 @@ class Packer:
 
         Saves the result image and the coordinates file according to settings
 
-        :param list sprites: of sprite objects
+        :param list sprites: list of sprite objects
         :param settings: settings object
         """
