@@ -22,6 +22,10 @@ class Format:
         :return: string to be saved to a file
         """
 
+# -----------------------------------------------------------------------------
+# Registration of formats
+# -----------------------------------------------------------------------------
+
 class UnknownFormatException(Exception):
     """
     Raised when trying to get an unknown format
@@ -56,3 +60,44 @@ def get_format(name):
         raise UnknownFormatException(name)
 
     return format()
+
+# -----------------------------------------------------------------------------
+# Compatibility Checking
+# -----------------------------------------------------------------------------
+
+class IncompatibilityReason:
+    """
+    Enumeration on causes of incompatibilites between formats and settings
+
+    - ROTATION_REQUIRED: settings allow rotation of sprites but format does
+      not define rotated sprites
+    """
+    ROTATION_REQUIRED = range(1)
+
+class WarningReason:
+    """
+    Enumeration on causes of incompatibilites warnings between formats and
+    settings
+    """
+    pass
+
+def check_compatibility(format, settings):
+    """
+    Check if the given format is compatible with the given settings
+
+    This is because some formats don't support rotating sprites
+
+    :param format: format instance
+    :param settings: settings object
+    :return: tuple containing a boolean, a list of incompatibilities reasons
+    and a list of warnings reasons
+    """
+    compatible = True
+    incompatibilities = [None]
+    warnings = [None]
+
+    if settings.allow_rotation and not format.supports_rotation:
+        compatible = False
+        incompatibilities.append(IncompatibilityReason.ROTATION_REQUIRED)
+
+    return compatible

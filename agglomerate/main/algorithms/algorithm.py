@@ -18,11 +18,15 @@ class Algorithm:
     @abc.abstractmethod
     def pack(self, sprites, settings):
         """
-        Sets sprites positions accordingly
+        Sets sprites positions accordingly, also modifies settings if neccesary
 
         :param list sprites: list of sprite objects
         :param settings: settings object
         """
+
+# -----------------------------------------------------------------------------
+# Registration of algorithms
+# -----------------------------------------------------------------------------
 
 class UnknownAlgorithmException(Exception):
     """
@@ -58,3 +62,54 @@ def get_algorithm(name):
         raise UnknownAlgorithmException(name)
 
     return algorithm()
+
+# -----------------------------------------------------------------------------
+# Compatibility checking
+# -----------------------------------------------------------------------------
+
+class IncompatibilityReason:
+    """
+    Enumeration on causes of incompatibilites between algorithms and settings
+
+    - AUTO_SIZE_REQUIRED: settings specify an automatic sheet size but
+      algorithm doesn't support size resolving
+    """
+    AUTO_SIZE_REQUIRED = range(1)
+
+class WarningReason:
+    """
+    Enumeration on causes of incompatibilites warnings between algorithms and
+    settings
+
+    - ROTATION_REQUIRED: settings allow rotation of sprites but algorithm does
+      not support rotation
+    """
+    ROTATION_REQUIRED = range(1)
+
+def check_compatibility(alg, settings):
+    """
+    Check if the given algorithm is compatible with the given settings
+
+    This is because some algorithms don't support rotating sprites or defining
+    neccesary sheet size
+
+    :param alg: algorithm instance
+    :param settings: settings object
+    :return: tuple containing a boolean, a list of incompatibilities reasons
+    and a list of warnings reasons
+    """
+    compatible = True
+    incompatibilities = [None]
+    warnings = [None]
+
+    w, h = settings.output_sheet_size
+    requires_sheet_size_selection = (w == "auto" or h == "auto")
+
+    if requires_sheet_size_selection and not alg.supports_sheet_size_selection:
+        compatible = False
+        incompatibilities.append(IncompatibilityReason.AUTO_SIZE_REQUIRED)
+
+    if settings.allow_rotation and not alg.supports_rotation:
+        warnings.append(WarningReason.ROTATION_REQUIRED)
+
+    return (compatible, incompatibilities, warnings)

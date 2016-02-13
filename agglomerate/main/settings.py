@@ -19,10 +19,9 @@ class Settings:
         whether a square sprite sheet is necessary
     require_power_of_two_output
         whether a power of two sized sprite sheet is necessary
-    output_width
-        width of the generated sprite sheet image, can be "auto"
-    output_height
-        height of the generated sprite sheet image, can be "auto"
+    output_sheet_size
+        size of the generated sprite sheet image, (width, height), values can
+        be "auto"
     """
     def __init__(self, algorithm, format):
         """
@@ -42,11 +41,10 @@ class Settings:
         """
         self.algorithm = algorithm
         self.format = format
-        output_sheet_path = None
-        output_coordinates_path = None
-        allow_rotation = False
-        padding = 0
-        require_square_output = False
-        require_power_of_two_output = False
-        output_width = "auto"
-        output_height = "auto"
+        self.output_sheet_path = None
+        self.output_coordinates_path = None
+        self.allow_rotation = False
+        self.padding = 0
+        self.require_square_output = False
+        self.require_power_of_two_output = False
+        self.output_sheet_size = ("auto", "auto")
