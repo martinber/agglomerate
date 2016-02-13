@@ -26,11 +26,11 @@ class Sprite:
 
         :param str path: path to image file
         """
-        image = PIL.Image.open(path)
-        size = image.size
-        rotation = 0
-        position = (None, None)
-        name = self.get_name_from_path(path)
+        self.image = PIL.Image.open(path)
+        self.size = self.image.size
+        self.rotation = 0
+        self.position = (None, None)
+        self.name = self.get_name_from_path(path)
 
     def get_name_from_path(self, path):
         """

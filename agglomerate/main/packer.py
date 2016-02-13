@@ -4,11 +4,14 @@ from .algorithms import *
 # We want to import every format, also imports module "format"
 from .formats import *
 
+import PIL
+
 def pack(sprites, settings):
     """
     Packs the sprites.
 
-    Saves the result image and the coordinates file according to settings.  
+    Saves the result image and the coordinates file according to settings.
+
     Checks compatibility between the algorithm, the format and the settings
     raising exceptions accordingly, but it is recommended to check
     compatibility before calling this function so you can print more
@@ -43,18 +46,29 @@ def pack(sprites, settings):
 def _generate_sheet(sprites, settings):
     """
     Creates the sheet pasting the sprites in the locations given by the
-    algorithm
+    algorithm and then saves the image.
     """
-    pass
+    transparent_color = (0, 0, 0, 0)
+    sheet = PIL.Image.new("RGBA", settings.output_sheet_size,
+                          transparent_color)
+
+    for s in sprites:
+        sheet.paste(s.image, (0, 0))
+
+    sheet.save(settings.output_sheet_path)
 
 def _save_coordinates(coordinates, settings):
     """
-    Saves the generated string into a file
+    Saves the generated string into a file.
 
     The output file is defined in the settings
     """
     with open(settings.output_coordinates_path, "w") as f:
         f.write(coordinates)
+
+# -----------------------------------------------------------------------------
+# Exceptions
+# -----------------------------------------------------------------------------
 
 class IncompatibleAlgorithmException(Exception):
     """

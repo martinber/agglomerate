@@ -100,4 +100,4 @@ def check_compatibility(format, settings):
         compatible = False
         incompatibilities.append(IncompatibilityReason.ROTATION_REQUIRED)
 
-    return compatible
+    return (compatible, incompatibilities, warnings)

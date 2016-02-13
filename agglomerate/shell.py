@@ -16,6 +16,7 @@ def main():
     settings = Settings(args.algorithm, args.format)
     settings.output_sheet_path = "sheet.png"
     settings.output_coordinates_path = "coordinates.json"
+    settings.output_sheet_size = (500, 500)
 
     sprites = [Sprite("ball1.png")]
 

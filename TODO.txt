@@ -1,1 +1,2 @@
 - Support individual sprite resizing
+- More error checking
