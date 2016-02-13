@@ -42,11 +42,11 @@ class Settings:
         """
         self.algorithm = algorithm
         self.format = format
-        output_sheet_path: None
-        output_coordinates_path: None
-        allow_rotation: False
-        padding: 0
-        require_square_output: False
-        require_power_of_two_output: False
-        output_width: auto
-        output_height: auto
+        output_sheet_path = None
+        output_coordinates_path = None
+        allow_rotation = False
+        padding = 0
+        require_square_output = False
+        require_power_of_two_output = False
+        output_width = "auto"
+        output_height = "auto"

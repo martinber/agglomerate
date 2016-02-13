@@ -1,4 +1,5 @@
 import PIL.Image
+import os
 
 class Sprite:
     """
@@ -10,7 +11,7 @@ class Sprite:
     size
         tuple in pixels
     rotation
-        rotation in pixels to be applied when creating the sheet
+        rotation in degrees to be applied when creating the sheet
     position
         position in the sheet in pixels, top-left corner regardless of
         rotation
@@ -19,7 +20,7 @@ class Sprite:
 
     """
 
-    def __init__(path):
+    def __init__(self, path):
         """
         Opens the image in the specified file and processes it
 
@@ -29,7 +30,7 @@ class Sprite:
         size = image.size
         rotation = 0
         position = (None, None)
-        name = get_name_from_path(path)
+        name = self.get_name_from_path(path)
 
     def get_name_from_path(self, path):
         """
