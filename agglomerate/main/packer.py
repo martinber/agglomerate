@@ -53,7 +53,7 @@ def _generate_sheet(sprites, settings):
                           transparent_color)
 
     for s in sprites:
-        sheet.paste(s.image, (0, 0))
+        sheet.paste(s.image, s.position, s.image)
 
     sheet.save(settings.output_sheet_path)
 

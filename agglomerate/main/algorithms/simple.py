@@ -8,8 +8,8 @@ class Simple(algorithm.Algorithm):
     supports_sheet_size_selection = False
 
     def pack(self, sprites, settings):
-        for s in sprites:
-            s.size = (0, 0)
+        for i, s in enumerate(sprites):
+            s.position = (i * 10, 0)
 
 
 algorithm.register_algorithm("simple", Simple)
