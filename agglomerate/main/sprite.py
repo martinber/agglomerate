@@ -13,7 +13,7 @@ class Sprite:
     rotation
         rotation in degrees to be applied when creating the sheet
     position
-        position in the sheet in pixels, top-left corner regardless of
+        tuple position in the sheet in pixels, top-left corner regardless of
         rotation
     name
         name to be used when creating the coordinates file
@@ -29,7 +29,7 @@ class Sprite:
         self.image = PIL.Image.open(path)
         self.size = self.image.size
         self.rotation = 0
-        self.position = (None, None)
+        self.position = None
         self.name = self.get_name_from_path(path)
 
     def get_name_from_path(self, path):
