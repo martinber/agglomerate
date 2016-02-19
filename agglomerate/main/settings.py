@@ -1,3 +1,5 @@
+from classes import Vector2
+
 class Settings:
     """
     Keeps track of all the packer settings
@@ -20,8 +22,8 @@ class Settings:
     require_power_of_two_output
         whether a power of two sized sprite sheet is necessary
     output_sheet_size
-        size of the generated sprite sheet image, (width, height), values can
-        be "auto"
+        named tuple that contains size of the generated sprite sheet image,
+        (width, height), values can be "auto"
     """
     def __init__(self, algorithm, format):
         """
@@ -36,8 +38,7 @@ class Settings:
         - padding: 0
         - require_square_output: False
         - require_power_of_two_output: False
-        - output_width: auto
-        - output_height: auto
+        - output_sheet_size: both x and y set to auto
         """
         self.algorithm = algorithm
         self.format = format
@@ -47,4 +48,4 @@ class Settings:
         self.padding = 0
         self.require_square_output = False
         self.require_power_of_two_output = False
-        self.output_sheet_size = ("auto", "auto")
+        self.output_sheet_size = Vector2("auto", "auto")

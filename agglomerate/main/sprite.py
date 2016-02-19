@@ -1,5 +1,6 @@
 import PIL.Image
 import os
+from classes import Vector2
 
 class Sprite:
     """
@@ -27,7 +28,10 @@ class Sprite:
         :param str path: path to image file
         """
         self.image = PIL.Image.open(path)
-        self.size = self.image.size
+
+        w, h = self.image.size
+        self.size = Vector2(w, h)
+
         self.rotation = 0
         self.position = None
         self.name = self.get_name_from_path(path)

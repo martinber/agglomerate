@@ -4,6 +4,7 @@ import argparse
 from main import packer
 from main.sprite import Sprite
 from main.settings import Settings
+from main.classes import Vector2
 
 import fnmatch
 import os
@@ -25,7 +26,8 @@ def main():
     settings = Settings(args.algorithm, args.format)
     settings.output_sheet_path = "sheet.png"
     settings.output_coordinates_path = "coordinates.json"
-    settings.output_sheet_size = (500, 500)
+    #settings.output_sheet_size = Vector2(500, 500)
+    settings.output_sheet_size = Vector2("auto", "auto")
 
     # Match every path given, some can contain wildcards
     matching_paths = []
