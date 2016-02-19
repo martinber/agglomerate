@@ -20,14 +20,16 @@ def main():
                         help="specify packing algorithm")
     parser.add_argument("-f", "--format", default="simplejson",
                         help="specify output format for coordinates file")
+    parser.add_argument("-s", "--size", default="auto",
+                        help=("size of the sheet in pixels, no number means "
+                              "auto e.g. 400x500 or 400x or x100 or auto"))
     args = parser.parse_args();
 
     # Create settings
     settings = Settings(args.algorithm, args.format)
     settings.output_sheet_path = "sheet.png"
     settings.output_coordinates_path = "coordinates.json"
-    #settings.output_sheet_size = Vector2(500, 500)
-    settings.output_sheet_size = Vector2("auto", "auto")
+    settings.output_sheet_size = _parse_size(args.size)
 
     # Match every path given, some can contain wildcards
     matching_paths = []
@@ -73,3 +75,48 @@ def _get_matching_files(path):
             files.append(os.path.join(directory, f))
 
     return files
+
+def _parse_size(string):
+    """
+    Interpret given size string:
+
+    String must be for example 100x200, 530x, x200 or auto. No number means
+    auto
+
+    :param str string:
+    :return: sheet size
+    :rtype: classes.Vector2
+    """
+    if string.find("x") < 0:
+        if string == "auto":
+            return Vector2("auto", "auto")
+        else:
+            print("Invalid size " + string)
+            sys.exit()
+    else:
+        dimensions = string.split("x", 1)
+        if len(dimensions) is not 2:
+            print("Invalid size " + string)
+            sys.exit()
+        else:
+            x, y = dimensions
+
+            if x == "":
+                x = "auto"
+            else:
+                try:
+                    x = int(x)
+                except:
+                    print("Invalid size " + string)
+                    sys.exit()
+
+            if y == "":
+                y = "auto"
+            else:
+                try:
+                    y = int(y)
+                except:
+                    print("Invalid size " + string)
+                    sys.exit()
+
+            return Vector2(x, y)
