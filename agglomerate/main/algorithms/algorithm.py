@@ -113,3 +113,19 @@ def check_compatibility(alg, settings):
         warnings.append(WarningReason.ROTATION_REQUIRED)
 
     return (compatible, incompatibilities, warnings)
+
+# -----------------------------------------------------------------------------
+# Exceptions for algorithm implementations
+# -----------------------------------------------------------------------------
+
+class AlgorithmOutOfSpaceException(Exception):
+    """
+    Thrown when the algorithm runs out of space in the sheet
+    """
+    pass
+
+class AlgorithmUnexpectedException(Exception):
+    """
+    Raised when the algorithm has an unexpected error
+    """
+    pass

@@ -23,11 +23,7 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             """
             free_node = root_node.find_space(sprite.size)
             if free_node:
-                # Place the sprite
-                sprite.position = free_node.position
-                # Mark the node as used and split the free space in two more
-                # nodes
-                free_node.split(sprite.size)
+                place_sprite(sprite, free_node)
                 print("Placed in")
                 print(sprite.position)
                 return True
@@ -42,62 +38,50 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             # Size defined by the user
             given_sheet_size = settings.output_sheet_size
 
+            # Check directions where we can extend
             sprite_fits_extending_below = (sprite.size.x <= root_node.size.x)
             sprite_fits_extending_right = (sprite.size.y <= root_node.size.y)
 
-            can_extend_below = (given_sheet_size.x == "auto" and
+            can_extend_below = (given_sheet_size.y == "auto" and
                                 sprite_fits_extending_below)
 
-            can_extend_right = (given_sheet_size.y == "auto" and
+            can_extend_right = (given_sheet_size.x == "auto" and
                                 sprite_fits_extending_right)
 
+            # Also check where we should extend if we want to get closer to a
+            # square shape
             should_extend_below = (can_extend_below and
                     root_node.size.x >= root_node.size.y + sprite.size.y)
             should_extend_right = (can_extend_right and
                     root_node.size.y >= root_node.size.x + sprite.size.x)
 
-            print(should_extend_below)
-            print(should_extend_right)
-
             if should_extend_below:
                 new_root = extend_below(root_node, sprite.size.y)
-                # Place the sprite
-                sprite.position = new_root.down.position
-                # Mark the node as used and split the free space in two more
-                # nodes
-                new_root.down.split(sprite.size)
+                place_sprite(sprite, new_root.down)
                 print("Extending below")
                 return new_root
 
             elif should_extend_right:
                 new_root = extend_right(root_node, sprite.size.x)
-                # Place the sprite
-                sprite.position = new_root.right.position
-                # Mark the node as used and split the free space in two more
-                # nodes
-                new_root.right.split(sprite.size)
+                place_sprite(sprite, new_root.right)
                 print("Extending right")
                 return new_root
 
             elif can_extend_below:
                 new_root = extend_below(root_node, sprite.size.y)
-                # Place the sprite
-                sprite.position = new_root.down.position
-                # Mark the node as used and split the free space in two more
-                # nodes
-                new_root.down.split(sprite.size)
+                place_sprite(sprite, new_root.down)
                 print("Extending below")
                 return new_root
 
             elif can_extend_right:
                 new_root = extend_right(root_node, sprite.size.x)
-                # Place the sprite
-                sprite.position = new_root.right.position
-                # Mark the node as used and split the free space in two more
-                # nodes
-                new_root.right.split(sprite.size)
+                place_sprite(sprite, new_root.right)
                 print("Extending right")
                 return new_root
+
+            else:
+                raise algorithm.AlgorithmOutOfSpaceException(
+                        "Cannot extend the sheet further")
 
         def extend_below(root_node, amount):
             """
@@ -130,6 +114,14 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
                                   (amount, root_node.size.y))
 
             return new_root
+
+        def place_sprite(sprite, node):
+            """
+            Places a sprite in a node, also splits the node
+            """
+            sprite.position = node.position
+            # Mark the node as used and split the free space in two more nodes
+            node.split(sprite.size)
 
         def sort_sprites(sprites):
             """
@@ -226,11 +218,22 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
                 self.down = Node((self_x, self_y + used_h),
                                  (self_w, self_h - used_h))
 
+# -----------------------------------------------------------------------------
+# Actual algorithm
+# -----------------------------------------------------------------------------
+
         # Sort the sprite list from the largest to the smallest
         sort_sprites(sprites)
 
+        # If a dimension is "auto", set it to the size of the first sprite
+        w, h = settings.output_sheet_size
+        if w == "auto":
+            w = sprites[0].size.x
+        if h == "auto":
+            h = sprites[0].size.y
+
         # Create root node in (0, 0) with the size of the first sprite
-        root_node = Node((0, 0), sprites[0].size)
+        root_node = Node((0, 0), (w, h))
 
         for s in sprites:
             print("Choosing a new sprite")

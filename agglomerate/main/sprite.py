@@ -11,8 +11,8 @@ class Sprite:
         PIL image
     size
         tuple in pixels
-    rotation
-        rotation in degrees to be applied when creating the sheet
+    rotated
+        true if the sprite was rotated 90 degrees clockwise by the algorithm
     position
         tuple position in the sheet in pixels, top-left corner regardless of
         rotation
@@ -32,7 +32,7 @@ class Sprite:
         w, h = self.image.size
         self.size = Vector2(w, h)
 
-        self.rotation = 0
+        self.rotated = False
         self.position = None
         self.name = self.get_name_from_path(path)
 
