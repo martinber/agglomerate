@@ -4,4 +4,4 @@ include README.rst
 include VERSION
 
 # Include the data files
-#recursive-include data *
+# recursive-include data *

@@ -1,10 +1,10 @@
-# Import all algorithms and formats so they get registered
 # We want to import every algorithm, also imports module "algorithm"
-from .algorithms import *
+from main.algorithms import *
 # We want to import every format, also imports module "format"
-from .formats import *
+from main.formats import *
 
 import PIL
+
 
 def pack(sprites, settings):
     """
@@ -43,19 +43,21 @@ def pack(sprites, settings):
     # Save the coordinates file
     _save_coordinates(coordinates, settings)
 
+
 def _generate_sheet(sprites, settings):
     """
     Creates the sheet pasting the sprites in the locations given by the
     algorithm and then saves the image.
     """
     transparent_color = (0, 0, 0, 0)
-    sheet = PIL.Image.new("RGBA", settings.output_sheet_size,
+    sheet = PIL.Image.new("RGBA", settings.sheet_size,
                           transparent_color)
 
     for s in sprites:
         sheet.paste(s.image, s.position, s.image)
 
     sheet.save(settings.output_sheet_path)
+
 
 def _save_coordinates(coordinates, settings):
     """
@@ -66,9 +68,11 @@ def _save_coordinates(coordinates, settings):
     with open(settings.output_coordinates_path, "w") as f:
         f.write(coordinates)
 
+
 # -----------------------------------------------------------------------------
 # Exceptions
 # -----------------------------------------------------------------------------
+
 
 class IncompatibleAlgorithmException(Exception):
     """
@@ -77,14 +81,14 @@ class IncompatibleAlgorithmException(Exception):
     :param str algorithm_name:
     :param str reason: why the algorithm is incompatible, optional
     """
-    def __init__(self, algorithm_name, reason = ""):
-        self.algorithm_name= algorithm_name
+    def __init__(self, algorithm_name, reason=""):
+        self.algorithm_name = algorithm_name
 
         # Set the message by calling parent's constructor
-        super(IncompatibleAlgorithmException, self) \
-            .__init__(("Algorithm {} is incompatible with the "
-                       "given settings, {}") \
-            .format(algorithm_name, reason))
+        message = "Format {} is incompatible with the given settings, {}" \
+            .format(format_name, reason)
+        super(IncompatibleAlgorithmException, self).__init__(message)
+
 
 class IncompatibleFormatException(Exception):
     """
@@ -97,6 +101,6 @@ class IncompatibleFormatException(Exception):
         self.format_name = format_name
 
         # Set the message by calling parent's constructor
-        super(IncompatibleAlgorithmException, self) \
-            .__init__("Format {} is incompatible with the given settings, {}" \
-            .format(format_name, reason))
+        message = "Format {} is incompatible with the given settings, {}" \
+            .format(format_name, reason)
+        super(IncompatibleAlgorithmException, self).__init__(message)

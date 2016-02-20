@@ -1,10 +1,10 @@
+import pkgutil
+import inspect
+
 # Allows importing all packages, also imports format.py
 # Useful because we want to import every format automatically
 
 __all__ = []
-
-import pkgutil
-import inspect
 
 for loader, name, is_pkg in pkgutil.walk_packages(__path__):
     module = loader.find_module(name).load_module(name)

@@ -1,11 +1,16 @@
-import format
+from main.formats import format
 import json
+
 
 class SimpleJSON(format.Format):
     """
     A simple JSON output
     """
-    supports_rotation = False
+    #supports_rotation = False
+    supports = {
+                "rotation": True,
+                "cropping": False,
+               }
 
     def generate(self, sprites, settings):
         # list (array) of sprites that will be converted to json

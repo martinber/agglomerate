@@ -1,5 +1,6 @@
-import algorithm
+from main.algorithms import algorithm
 from main.classes import Vector2
+
 
 class BinaryTreeAlgorithm(algorithm.Algorithm):
     """
@@ -8,14 +9,21 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
     Places sprites from large to small, one by one.
     http://codeincomplete.com/posts/2011/5/7/bin_packing/
     """
-    supports_rotation = False
-    supports_sheet_size_selection = True
+    supports = {
+                "rotation": False,
+                "cropping": False,
+                "padding": False,
+
+                "auto_sheet_size": True,
+                "auto_square_sheet_size": False,
+                "auto_power_of_two_sheet_size": False,
+               }
 
     def pack(self, sprites, settings):
 
-# -----------------------------------------------------------------------------
-# Helper functions
-# -----------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Helper functions
+    # -------------------------------------------------------------------------
 
         def place_sprite_in_free_space(sprite, root_node):
             """
@@ -36,7 +44,7 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             sprite and returns the new root_node
             """
             # Size defined by the user
-            given_sheet_size = settings.output_sheet_size
+            given_sheet_size = settings.sheet_size
 
             # Check directions where we can extend
             sprite_fits_extending_below = (sprite.size.x <= root_node.size.x)
@@ -50,10 +58,14 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
 
             # Also check where we should extend if we want to get closer to a
             # square shape
-            should_extend_below = (can_extend_below and
-                    root_node.size.x >= root_node.size.y + sprite.size.y)
-            should_extend_right = (can_extend_right and
-                    root_node.size.y >= root_node.size.x + sprite.size.x)
+            should_extend_below = (
+                    can_extend_below and
+                    root_node.size.x >= root_node.size.y + sprite.size.y
+            )
+            should_extend_right = (
+                    can_extend_right and
+                    root_node.size.y >= root_node.size.x + sprite.size.x
+            )
 
             if should_extend_below:
                 new_root = extend_below(root_node, sprite.size.y)
@@ -95,7 +107,7 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
 
             new_root.right = root_node
             new_root.down = Node((0, root_node.size.y),
-                                  (root_node.size.x, amount))
+                                 (root_node.size.x, amount))
 
             return new_root
 
@@ -142,9 +154,9 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             """
             return size1.x <= size2.x and size1.y <= size2.y
 
-# -----------------------------------------------------------------------------
-# Binary tree implementation
-# -----------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Binary tree implementation
+    # -------------------------------------------------------------------------
 
         class Node:
             """
@@ -226,7 +238,7 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
         sort_sprites(sprites)
 
         # If a dimension is "auto", set it to the size of the first sprite
-        w, h = settings.output_sheet_size
+        w, h = settings.sheet_size
         if w == "auto":
             w = sprites[0].size.x
         if h == "auto":
@@ -243,6 +255,6 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
                 root_node = place_sprite_extending_sheet(s, root_node)
 
         # Update settings
-        settings.output_sheet_size = root_node.size
+        settings.sheet_size = root_node.size
 
 algorithm.register_algorithm("binarytree", BinaryTreeAlgorithm)

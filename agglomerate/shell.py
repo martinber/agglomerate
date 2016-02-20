@@ -10,6 +10,7 @@ import fnmatch
 import os
 import sys
 
+
 def main():
     print("Welcome to agglomerate!")
 
@@ -23,7 +24,7 @@ def main():
     parser.add_argument("-s", "--size", default="auto",
                         help=("size of the sheet in pixels, no number means "
                               "auto e.g. 400x500 or 400x or x100 or auto"))
-    args = parser.parse_args();
+    args = parser.parse_args()
 
     # Create settings
     settings = Settings(args.algorithm, args.format)
@@ -48,6 +49,7 @@ def main():
     sprites = [Sprite(path) for path in matching_paths]
 
     packer.pack(sprites, settings)
+
 
 def _get_matching_files(path):
     """
@@ -75,6 +77,7 @@ def _get_matching_files(path):
             files.append(os.path.join(directory, f))
 
     return files
+
 
 def _parse_size(string):
     """

@@ -1,16 +1,21 @@
 import abc
 
+
 class Format:
     """
     Base class for all coordinates file output formats
 
-    Creates a string defining sprites placement
+    Creates a string defining sprites placement. has a "supports" dictionary
 
-    **Necessary class variables**
-    supports_rotation
-        whether the format supports rotation of sprites
+    **Supports dictionary**
+    - rotation: whether the format supports rotation of sprites
+    - cropping: True if the format supports sprite cropping
     """
-    supports_rotation = False
+    #supports_rotation = False
+    supports = {
+                "rotation": False,
+                "cropping": False,
+               }
 
     @abc.abstractmethod
     def generate(self, sprites, settings):
@@ -22,9 +27,11 @@ class Format:
         :return: string to be saved to a file
         """
 
+
 # -----------------------------------------------------------------------------
 # Registration of formats
 # -----------------------------------------------------------------------------
+
 
 class UnknownFormatException(Exception):
     """
@@ -32,11 +39,14 @@ class UnknownFormatException(Exception):
     """
     def __init__(self, format_name):
         self.format_name = format_name
+
     def __repr__(self):
         return "Unknown format named " + format_name
 
+
 # Dictionary of registered formats
 formats = {}
+
 
 def register_format(name, format):
     """
@@ -46,6 +56,7 @@ def register_format(name, format):
     :param class format: the format class
     """
     formats[name] = format
+
 
 def get_format(name):
     """
@@ -61,9 +72,11 @@ def get_format(name):
 
     return format()
 
+
 # -----------------------------------------------------------------------------
 # Compatibility Checking
 # -----------------------------------------------------------------------------
+
 
 class IncompatibilityReason:
     """
@@ -72,7 +85,9 @@ class IncompatibilityReason:
     - ROTATION_REQUIRED: settings allow rotation of sprites but format does
       not define rotated sprites
     """
-    ROTATION_REQUIRED = range(1)
+    (ROTATION_ALLOWED,
+    CROPPING_ALLOWED) = range(2)
+
 
 class WarningReason:
     """
@@ -80,6 +95,7 @@ class WarningReason:
     settings
     """
     pass
+
 
 def check_compatibility(format, settings):
     """
@@ -96,8 +112,12 @@ def check_compatibility(format, settings):
     incompatibilities = [None]
     warnings = [None]
 
-    if settings.allow_rotation and not format.supports_rotation:
+    if settings.allow["rotation"] and not format.supports["rotation"]:
         compatible = False
-        incompatibilities.append(IncompatibilityReason.ROTATION_REQUIRED)
+        incompatibilities.append(IncompatibilityReason.ROTATION_ALLOWED)
+
+    if settings.allow["cropping"] and not format.supports["cropping"]:
+        compatible = False
+        incompatibilities.append(IncompatibilityReason.CROPPING_ALLOWED)
 
     return (compatible, incompatibilities, warnings)

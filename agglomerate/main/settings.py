@@ -1,4 +1,5 @@
-from classes import Vector2
+from main.classes import Vector2
+
 
 class Settings:
     """
@@ -13,17 +14,22 @@ class Settings:
         where to save the generated sprite sheet
     output_coordinates_path
         where to save the generated coordinates file
-    allow_rotation
-        whether to allow sprite rotation
-    padding
-        padding applied to sprites
-    require_square_output
-        whether a square sprite sheet is necessary
-    require_power_of_two_output
-        whether a power of two sized sprite sheet is necessary
-    output_sheet_size
-        named tuple that contains size of the generated sprite sheet image,
+    allow
+        dictionary containing allowed settings
+    require
+        dictionay containing required settings
+    sheet_size
+        Vector2 that contains size of the generated sprite sheet image,
         (width, height), values can be "auto"
+
+    **Allowed dictionary**
+    - rotation: True if the user allows the rotation of sprites
+    - cropping: True if the user allows cropping of sprites
+
+    **Required dictionary**
+    - square_sheet_size: True if a squared sheet is required
+    - power_of_two_sheet_size: True if power-of-two dimensions are required
+    - padding: Padding to appli to sprites, can be False or an integer
     """
     def __init__(self, algorithm, format):
         """
@@ -44,8 +50,16 @@ class Settings:
         self.format = format
         self.output_sheet_path = None
         self.output_coordinates_path = None
-        self.allow_rotation = False
-        self.padding = 0
-        self.require_square_output = False
-        self.require_power_of_two_output = False
-        self.output_sheet_size = Vector2("auto", "auto")
+
+        self.allow = {
+                     "rotation": False,
+                     "cropping": False
+                     }
+        
+        self.require = {
+                        "square_sheet_size": False,
+                        "power_of_two_sheet_size": False,
+                        "padding": False
+                        }
+
+        self.sheet_size = Vector2("auto", "auto")

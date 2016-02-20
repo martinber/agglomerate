@@ -1,6 +1,7 @@
 import PIL.Image
 import os
-from classes import Vector2
+from main.classes import Vector2
+
 
 class Sprite:
     """
@@ -14,11 +15,10 @@ class Sprite:
     rotated
         true if the sprite was rotated 90 degrees clockwise by the algorithm
     position
-        tuple position in the sheet in pixels, top-left corner regardless of
+        Vector2 position in the sheet in pixels, top-left corner regardless of
         rotation
     name
         name to be used when creating the coordinates file
-
     """
 
     def __init__(self, path):
