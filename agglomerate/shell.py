@@ -1,10 +1,10 @@
 from __future__ import print_function
 
 import argparse
-from main import packer
-from main.sprite import Sprite
-from main.settings import Settings
-from main.classes import Vector2
+from agglomerate.main import packer
+from agglomerate.main.sprite import Sprite
+from agglomerate.main.settings import Settings
+from agglomerate.main.classes import Vector2
 
 import fnmatch
 import os

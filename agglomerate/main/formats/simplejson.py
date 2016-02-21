@@ -1,4 +1,4 @@
-from main.formats import format
+from agglomerate.main.formats import format
 import json
 
 

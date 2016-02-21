@@ -1,7 +1,7 @@
 # We want to import every algorithm, also imports module "algorithm"
-from main.algorithms import *
+from agglomerate.main.algorithms import *
 # We want to import every format, also imports module "format"
-from main.formats import *
+from agglomerate.main.formats import *
 
 import PIL
 

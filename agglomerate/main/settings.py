@@ -1,4 +1,4 @@
-from main.classes import Vector2
+from agglomerate.main.classes import Vector2
 
 
 class Settings:

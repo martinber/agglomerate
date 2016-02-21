@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 from os import path
+from codecs import open
 
 here = path.abspath(path.dirname(__file__))
 
@@ -12,13 +13,13 @@ with open(path.join(here, 'VERSION'), "r", "utf-8") as f:
     _version = f.read()
 
 setup(
-    name='sample',
+    name='agglomerate',
     version=_version,
 
     description='A simple sprite packer',
     long_description=_long_description,
 
-    # url='https://github.com/martinber/agglomerate',
+    url='https://gitlab.com/mbernardi/agglomerate',
     author='Martin Bernardi',
     author_email='martinbernardi@openmailbox.org',
     license='MIT',
@@ -38,7 +39,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'agglomerate=agglomerate.scripts.agglomerate:main',
+            'agglomerate=agglomerate.shell:main',
         ],
     },
 

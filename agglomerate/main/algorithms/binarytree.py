@@ -1,5 +1,5 @@
-from main.algorithms import algorithm
-from main.classes import Vector2
+from agglomerate.main.algorithms import algorithm
+from agglomerate.main.classes import Vector2
 
 
 class BinaryTreeAlgorithm(algorithm.Algorithm):
