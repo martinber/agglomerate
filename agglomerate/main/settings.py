@@ -55,7 +55,7 @@ class Settings:
                      "rotation": False,
                      "cropping": False
                      }
-        
+
         self.require = {
                         "square_sheet_size": False,
                         "power_of_two_sheet_size": False,

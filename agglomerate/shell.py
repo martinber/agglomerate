@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser(description="Simple texture packer.")
     parser.add_argument("sprites_paths", nargs="+",
                         help="paths to sprites, can use wildcards")
-    parser.add_argument("-a", "--algorithm", default="simple",
+    parser.add_argument("-a", "--algorithm", default="binarytree",
                         help="specify packing algorithm")
     parser.add_argument("-f", "--format", default="simplejson",
                         help="specify output format for coordinates file")
@@ -30,7 +30,7 @@ def main():
     settings = Settings(args.algorithm, args.format)
     settings.output_sheet_path = "sheet.png"
     settings.output_coordinates_path = "coordinates.json"
-    settings.output_sheet_size = _parse_size(args.size)
+    settings.sheet_size = _parse_size(args.size)
 
     # Match every path given, some can contain wildcards
     matching_paths = []
