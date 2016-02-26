@@ -3,6 +3,7 @@ build
 dist
 *.egg-info
 
+doc/_build
 
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]

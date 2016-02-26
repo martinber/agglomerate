@@ -1,5 +1,5 @@
 from agglomerate.main.algorithms import algorithm
-from agglomerate.main.classes import Vector2
+from agglomerate.main.misc.vector2 import Vector2
 
 
 class BinaryTreeAlgorithm(algorithm.Algorithm):
@@ -101,13 +101,14 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             root_node with the old root_node as a child. And returns the new
             root_node
             """
-            new_root = Node((0, 0),
-                            (root_node.size.x, root_node.size.y + amount))
+            new_root = Node(Vector2(0, 0),
+                            Vector2(root_node.size.x,
+                                    root_node.size.y + amount))
             new_root.used = True
 
             new_root.right = root_node
-            new_root.down = Node((0, root_node.size.y),
-                                 (root_node.size.x, amount))
+            new_root.down = Node(Vector2(0, root_node.size.y),
+                                 Vector2(root_node.size.x, amount))
 
             return new_root
 
@@ -117,13 +118,14 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             root_node with the old root_node as a child, and returns the new
             root_node
             """
-            new_root = Node((0, 0),
-                            (root_node.size.x + amount, root_node.size.y))
+            new_root = Node(Vector2(0, 0),
+                            Vector2(root_node.size.x + amount,
+                                    root_node.size.y))
             new_root.used = True
 
             new_root.down = root_node
-            new_root.right = Node((root_node.size.x, 0),
-                                  (amount, root_node.size.y))
+            new_root.right = Node(Vector2(root_node.size.x, 0),
+                                  Vector2(amount, root_node.size.y))
 
             return new_root
 
@@ -139,14 +141,13 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             """
             Sorts sprites from largest to smallest (by longest side).
             """
-            sprites.sort(key=lambda s: max(s.size), reverse=True)
+            sprites.sort(key=lambda s: max(s.size.x, s.size.y), reverse=True)
 
         def get_area(size):
             """
             Returns the area from the given size tuple.
             """
-            w, h = size
-            return w * h
+            return size.x * size.y
 
         def fits(size1, size2):
             """
@@ -165,8 +166,7 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             """
             def __init__(self, position, size):
                 """
-                Creates a node, specifying position and size tuples (later
-                they are converted to classes.Vector2
+                Creates a node, specifying position and size Vector2
                 """
                 # Means that already contains a sprite but also means that
                 # contains child nodes
@@ -176,15 +176,13 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
                 # Left node
                 self.down = None
                 # Rectangle data
-                x, y = position
-                w, h = size
-                self.position = Vector2(x, y)
-                self.size = Vector2(w, h)
+                self.position = position
+                self.size = size
 
             def find_space(self, s):
                 """
                 Recurses child nodes until it finds a free node larger than the
-                given size
+                given size Vector2
 
                 Returns the node or False
                 """
@@ -212,7 +210,7 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
                 Mark the node as used and split the remaining space in two
                 nodes
 
-                The used space is a size tuple, represents a rectangle placed
+                The used space is a size Vector2, represents a rectangle placed
                 on the minimal x and minimal y position
                 """
                 self.used = True
@@ -224,28 +222,32 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
                 used_w = used_space.x
                 used_h = used_space.y
 
-                self.right = Node((self_x + used_w, self_y),
-                                  (self_w - used_w, used_h))
+                self.right = Node(Vector2(self_x + used_w, self_y),
+                                  Vector2(self_w - used_w, used_h))
 
-                self.down = Node((self_x, self_y + used_h),
-                                 (self_w, self_h - used_h))
+                self.down = Node(Vector2(self_x, self_y + used_h),
+                                 Vector2(self_w, self_h - used_h))
 
 # -----------------------------------------------------------------------------
 # Actual algorithm
 # -----------------------------------------------------------------------------
 
+        for s in sprites:
+            print(s)
         # Sort the sprite list from the largest to the smallest
         sort_sprites(sprites)
 
         # If a dimension is "auto", set it to the size of the first sprite
-        w, h = settings.sheet_size
+        w, h = settings.sheet_size.to_tuple()
         if w == "auto":
             w = sprites[0].size.x
         if h == "auto":
             h = sprites[0].size.y
 
+        print(w, h)
+
         # Create root node in (0, 0) with the size of the first sprite
-        root_node = Node((0, 0), (w, h))
+        root_node = Node(Vector2(0, 0), Vector2(w, h))
 
         for s in sprites:
             print("Choosing a new sprite")

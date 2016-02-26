@@ -1,3 +1,4 @@
+from agglomerate.main.misc.vector2 import Vector2
 # We want to import every algorithm, also imports module "algorithm"
 from agglomerate.main.algorithms import *
 # We want to import every format, also imports module "format"
@@ -50,11 +51,11 @@ def _generate_sheet(sprites, settings):
     algorithm and then saves the image.
     """
     transparent_color = (0, 0, 0, 0)
-    sheet = PIL.Image.new("RGBA", settings.sheet_size,
+    sheet = PIL.Image.new("RGBA", settings.sheet_size.to_tuple(),
                           transparent_color)
 
     for s in sprites:
-        sheet.paste(s.image, s.position, s.image)
+        sheet.paste(s.image, s.position.to_tuple(), s.image)
 
     sheet.save(settings.output_sheet_path)
 

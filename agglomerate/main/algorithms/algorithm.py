@@ -133,7 +133,7 @@ def check_compatibility(alg, settings):
     incompatibilities = [None]
     warnings = [None]
 
-    w, h = settings.sheet_size
+    w, h = settings.sheet_size.to_tuple()
     requires_sheet_size_selection = (w == "auto" or h == "auto")
 
     if requires_sheet_size_selection and not \

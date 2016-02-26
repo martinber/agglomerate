@@ -11,7 +11,6 @@ class Format:
     - rotation: whether the format supports rotation of sprites
     - cropping: True if the format supports sprite cropping
     """
-    #supports_rotation = False
     supports = {
                 "rotation": False,
                 "cropping": False,

@@ -1,5 +1,6 @@
 from agglomerate.main.formats import format
 import json
+from agglomerate.main.misc.vector2 import Vector2
 
 
 class SimpleJSON(format.Format):
