@@ -1,2 +1,2 @@
 - Support individual sprite resizing
-- More error checking
+- Class methods to create Settings and Vector2 instances

@@ -27,29 +27,6 @@ _default_size = "auto"
 def main():
     print("Welcome to agglomerate!")
 
-    """
-    parser = argparse.ArgumentParser(description="Simple texture packer.")
-
-    main_arg = parser.add_mutually_exclusive_group(required=True)
-    main_arg.add_argument("-c", "--config",
-                        help="load images paths and settings from file")
-    main_arg.add_argument("-i", "--images", nargs="+",
-                        help="create from paths to images, can use wildcards")
-    main_arg.add_argumen
-
-    parser.add_argument("-a", "--algorithm", default=_default_algorithm,
-                        help="specify packing algorithm")
-    parser.add_argument("-f", "--format", default=_default_format,
-                        help="specify output format for coordinates file")
-    parser.add_argument("-s", "--size", default=_default_size,
-                        help=("size of the sheet in pixels, no number means "
-                              "auto e.g. 400x500 or 400x or x100 or auto"))
-    args = parser.parse_args()
-
-    packer.pack(sprites, settings)
-    """
-
-
     # create parser
     parser = argparse.ArgumentParser(prog="agglomerate",
                                      description="Simple texture packer.")

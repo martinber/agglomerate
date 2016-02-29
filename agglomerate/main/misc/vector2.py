@@ -16,31 +16,32 @@ class Vector2:
         self.y = y
 
 
+    @classmethod
+    def from_tuple(self, tuple):
+        """
+        Creates a Vector2 from a tuple.
+
+        Tuple must be (x, y)
+        """
+        return Vector2(x, y)
+
+
+    @classmethod
+    def from_dict(self, dictionary):
+        """
+        Creates a Vector2 from a dictionary.
+
+        Dictionary must have "x" and "y" values
+        """
+        return Vector2(dictionary["x"], dictionary["y"])
+
+
     def set(self, x, y):
         """
         Set to given values.
         """
         self.x = x
         self.y = y
-
-
-    def from_tuple(self, tuple):
-        """
-        Set values from a tuple.
-
-        Tuple must be (x, y)
-        """
-        x, y = tuple
-
-
-    def from_dict(self, dictionary):
-        """
-        Set values from dictionary.
-
-        Dictionary must have "x" and "y" values
-        """
-        self.x = dictionary["x"]
-        self.y = dictionary["y"]
 
 
     def set_x(self, x):

@@ -50,9 +50,8 @@ def _generate_sheet(sprites, settings):
     Creates the sheet pasting the sprites in the locations given by the
     algorithm and then saves the image.
     """
-    transparent_color = (0, 0, 0, 0)
     sheet = PIL.Image.new("RGBA", settings.sheet_size.to_tuple(),
-                          transparent_color)
+                          settings.background_color.to_tuple())
 
     for s in sprites:
         sheet.paste(s.image, s.position.to_tuple(), s.image)

@@ -232,8 +232,6 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
 # Actual algorithm
 # -----------------------------------------------------------------------------
 
-        for s in sprites:
-            print(s)
         # Sort the sprite list from the largest to the smallest
         sort_sprites(sprites)
 
@@ -243,8 +241,6 @@ class BinaryTreeAlgorithm(algorithm.Algorithm):
             w = sprites[0].size.x
         if h == "auto":
             h = sprites[0].size.y
-
-        print(w, h)
 
         # Create root node in (0, 0) with the size of the first sprite
         root_node = Node(Vector2(0, 0), Vector2(w, h))
