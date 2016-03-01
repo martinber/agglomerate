@@ -7,11 +7,11 @@ class SimpleJSON(format.Format):
     """
     A simple JSON output
     """
-    #supports_rotation = False
     supports = {
                 "rotation": True,
                 "cropping": False,
                }
+    suggested_extension = "json"
 
     def generate(self, sprites, settings):
         # list (array) of sprites that will be converted to json

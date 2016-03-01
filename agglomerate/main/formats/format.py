@@ -5,7 +5,8 @@ class Format:
     """
     Base class for all coordinates file output formats
 
-    Creates a string defining sprites placement. has a "supports" dictionary
+    Creates a string defining sprites placement, has a "supports" dictionary
+    and a suggested extension
 
     **Supports dictionary**
     - rotation: whether the format supports rotation of sprites
@@ -15,6 +16,7 @@ class Format:
                 "rotation": False,
                 "cropping": False,
                }
+    suggested_extension = "txt"
 
     @abc.abstractmethod
     def generate(self, sprites, settings):
