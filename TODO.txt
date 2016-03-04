@@ -1,3 +1,2 @@
 - Support individual sprite resizing
-- Class methods to create Settings and Vector2 instances
 - Try supported pillow formats and modes

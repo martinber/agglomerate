@@ -17,7 +17,7 @@ class Vector2:
 
 
     @classmethod
-    def from_tuple(self, tuple):
+    def from_tuple(cls, tuple):
         """
         Creates a Vector2 from a tuple.
 
@@ -27,7 +27,7 @@ class Vector2:
 
 
     @classmethod
-    def from_dict(self, dictionary):
+    def from_dict(cls, dictionary):
         """
         Creates a Vector2 from a dictionary.
 
@@ -77,3 +77,7 @@ class Vector2:
         Return a dictionary containing "x" and "y" values
         """
         return {"x": self.x, "y": self.y}
+
+
+    def __repr__(self):
+        return "({}, {})".format(self.x, self.y)

@@ -60,6 +60,8 @@ def _generate_sheet(sprites, settings):
 
     for s in sprites:
         sheet.paste(s.image, s.position.to_tuple(), s.image)
+        print("Placed in")
+        print(s.position)
 
     # if output_sheet_format is an unicode string, pillow has problems
     if isinstance(settings.output_sheet_format, unicode):
