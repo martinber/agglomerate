@@ -1,6 +1,32 @@
 import PIL.Image
 import os
-from agglomerate.main.classes import Vector2
+import agglomerate.main.math
+
+class Item:
+    """
+    Represents a sprite or a group of sprites, with a rectangular shape.
+
+    **Fields**
+    position
+        Vector2 position in the sheet in pixels, top-left corner regardless of
+        rotation.
+    size
+        Vector2 in pixels of the sprite in the sheet
+    rotated
+        true if the item was rotated 90 degrees clockwise by the algorithm
+    type
+        string, can be "sprite", "group" or None
+    """
+
+    def __init__(self, position=agglomerate.main.math.Vector2(),
+                 size=agglomerate.main.math.Vector2()):
+        """
+        Creates an item with the optional given position and size Vector2
+        """
+        self.position = position
+        self.size = size
+        self.rotated = False
+        self.type = None
 
 
 class Sprite:
@@ -20,7 +46,7 @@ class Sprite:
 
     position
         Vector2 position in the sheet in pixels, top-left corner regardless of
-        rotation. 
+        rotation.
     size
         Vector2 in pixels of the sprite in the sheet, this is'nt the original
         size if the sprite was cropped
@@ -52,7 +78,7 @@ class Sprite:
         self.position = None
 
         w, h = self.image.size
-        self.size = Vector2(w, h)
+        self.size = agglomerate.main.math.Vector2(w, h)
         self.original_size = self.size
 
         self.crop_l = 0

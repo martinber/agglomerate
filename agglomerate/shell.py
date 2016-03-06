@@ -1,14 +1,13 @@
 from __future__ import print_function
 
+import agglomerate.main.packer
+import agglomerate.main.settings
+import agglomerate.main.items
+import agglomerate.main.math
+import agglomerate.main.formats.format
+
 import argparse
 import json
-from agglomerate.main import packer
-from agglomerate.main.sprite import Sprite
-from agglomerate.main.settings import Settings
-from agglomerate.main.misc.vector2 import Vector2
-from agglomerate.main.misc.color import Color
-from agglomerate.main.formats import format
-
 import fnmatch
 import os
 import sys
@@ -20,7 +19,7 @@ Commandline interface for the packer.
 Allows parameters as arguments, but also can load parameters from a json file
 """
 
-
+ 
 _default_algorithm = "binarytree"
 _default_format = "simplejson"
 _default_output_sheet_path = "sheet"
@@ -86,11 +85,11 @@ def main():
     if args.subparser == "pack":
         sprites_paths, settings = _load_parameters_from_arguments(args)
         sprites, settings = _process_parameters(sprites_paths, settings)
-        packer.pack(sprites, settings)
+        agglomerate.main.packer.pack(sprites, settings)
     elif args.subparser == "from":
         sprites_paths, settings = _load_parameters_from_file(args.path)
         sprites, settings = _process_parameters(sprites_paths, settings)
-        packer.pack(sprites, settings)
+        agglomerate.main.packer.pack(sprites, settings)
     elif args.subparser == "new":
         _create_parameters_file(args.path)
 
@@ -109,7 +108,7 @@ def _load_parameters_from_arguments(args):
     sprite_paths = args.images
 
     # Create transitory settings
-    settings = Settings(args.algorithm, args.format)
+    settings = agglomerate.main.settings.Settings(args.algorithm, args.format)
     settings.output_sheet_path = args.output[0]
     settings.output_coordinates_path = args.output[1]
     settings.output_sheet_format = args.image_format
@@ -140,7 +139,7 @@ def _load_parameters_from_file(path):
     settings_dict = root["settings"]
 
     # create transitory settings
-    settings = Settings.from_dict(settings_dict)
+    settings = agglomerate.main.settings.Settings.from_dict(settings_dict)
 
     return (sprites_paths, settings)
 
@@ -168,7 +167,7 @@ def _process_parameters(sprites_paths, settings):
         print("    ", p)
 
     # create sprites
-    sprites = [Sprite(path) for path in matching_paths]
+    sprites = [agglomerate.main.items.Sprite(path) for path in matching_paths]
 
 
     # Check settings
@@ -176,7 +175,8 @@ def _process_parameters(sprites_paths, settings):
     # the color given by the user is a string, we need to create the Color
     # instance
     if isinstance(settings.background_color, basestring):
-        settings.background_color = Color.from_hex(settings.background_color)
+        settings.background_color = \
+                agglomerate.main.color.Color.from_hex(settings.background_color)
 
     # the size given by the user is a string, we need to create the Vector2
     if isinstance(settings.sheet_size, basestring):
@@ -201,8 +201,11 @@ def _process_parameters(sprites_paths, settings):
     # if output_coordinates_path doesn't have extension
     if os.path.splitext(settings.output_coordinates_path)[1] == "":
         # add the suggested extension by the format
+        chosen_format = \
+                agglomerate.main.formats.format.get_format(settings.format)
+
         settings.output_coordinates_path += "." + \
-                format.get_format(settings.format).suggested_extension
+                chosen_format.suggested_extension
 
 
     return (sprites, settings)
@@ -218,7 +221,9 @@ def _create_parameters_file(path):
 
     :param str path: path where to save file
     """
-    settings = Settings(_default_algorithm, _default_format)
+    settings = agglomerate.main.settings.Settings(
+            _default_algorithm, _default_format)
+
     settings_dict = settings.to_dict()
 
     sprites = ["example/path/*.png"]
@@ -276,7 +281,7 @@ def _parse_size(string):
     """
     if string.find("x") < 0:
         if string == "auto":
-            return Vector2("auto", "auto")
+            return agglomerate.main.math.Vector2("auto", "auto")
         else:
             print("Invalid size " + string)
             sys.exit()
@@ -306,4 +311,4 @@ def _parse_size(string):
                     print("Invalid size " + string)
                     sys.exit()
 
-            return Vector2(x, y)
+            return agglomerate.main.math.Vector2(x, y)

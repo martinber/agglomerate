@@ -1,5 +1,5 @@
-from agglomerate.main.misc.vector2 import Vector2
-from agglomerate.main.misc.color import Color
+import agglomerate.main.math
+import agglomerate.main.color
 
 
 class Settings:
@@ -109,8 +109,9 @@ class Settings:
                         "padding": False
                         }
 
-        self.sheet_size = Vector2("auto", "auto")
-        self.background_color = Color.from_hex("#00000000")
+        self.sheet_size = agglomerate.main.math.Vector2("auto", "auto")
+        self.background_color = \
+                agglomerate.main.color.Color.from_hex("#00000000")
 
 
     @classmethod
@@ -133,12 +134,15 @@ class Settings:
         s.output_sheet_color_mode = dictionary["output_sheet_color_mode"]
         s.allow = dictionary["allow"]
         s.require = dictionary["require"]
+
         # sheet_size is a dictionary, we need to create a Vector2 instance
         # Vector2 can be initialized from a dict
-        s.sheet_size = Vector2()
-        s.sheet_size = Vector2.from_dict(dictionary["sheet_size"])
+        s.sheet_size = agglomerate.main.math.Vector2.from_dict(
+                dictionary["sheet_size"])
+
         # background_color is a hex code string, we need a Color instance
-        s.background_color = Color.from_hex(dictionary["background_color"])
+        s.background_color = agglomerate.main.color.Color.from_hex(
+                dictionary["background_color"])
 
         return s
 

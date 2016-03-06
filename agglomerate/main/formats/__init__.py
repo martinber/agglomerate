@@ -1,3 +1,4 @@
+"""
 import pkgutil
 import inspect
 
@@ -15,3 +16,4 @@ for loader, name, is_pkg in pkgutil.walk_packages(__path__):
 
         globals()[name] = value
         __all__.append(name)
+"""

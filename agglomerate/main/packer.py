@@ -1,8 +1,13 @@
-from agglomerate.main.misc.vector2 import Vector2
 # We want to import every algorithm, also imports module "algorithm"
-from agglomerate.main.algorithms import *
+#from agglomerate.main.algorithms import *
 # We want to import every format, also imports module "format"
-from agglomerate.main.formats import *
+#from agglomerate.main.formats import *
+import agglomerate.main.algorithms.algorithm
+import agglomerate.main.algorithms.binarytree
+import agglomerate.main.algorithms.inline
+import agglomerate.main.formats.format
+import agglomerate.main.formats.simplejson
+
 
 import PIL
 
@@ -26,16 +31,16 @@ def pack(sprites, settings):
     :param settings: settings object
     """
     # Get an instance of the algorithm and format named in the settings
-    a = algorithm.get_algorithm(settings.algorithm)
-    f = format.get_format(settings.format)
+    a = agglomerate.main.algorithms.algorithm.get_algorithm(settings.algorithm)
+    f = agglomerate.main.formats.format.get_format(settings.format)
 
     # Check if the chosen algorithm and output format is compatible with
     # the specified settings
-    compatible, __, __ = algorithm.check_compatibility(a, settings)
+    compatible, __, __ = agglomerate.main.algorithms.algorithm.check_compatibility(a, settings)
     if not compatible:
         raise IncompatibleAlgorithmException(settings.algorithm)
 
-    compatible, __, __ = format.check_compatibility(f, settings)
+    compatible, __, __ = agglomerate.main.formats.format.check_compatibility(f, settings)
     if not compatible:
         raise IncompatibleFormatException(settings.format)
 

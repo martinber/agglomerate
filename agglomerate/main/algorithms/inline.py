@@ -1,9 +1,9 @@
-from agglomerate.main.algorithms import algorithm
-from agglomerate.main.misc.vector2 import Vector2
+import agglomerate.main.algorithms.algorithm
+from agglomerate.main.math import Vector2
 import copy
 
 
-class InlineAlgorithm(algorithm.Algorithm):
+class InlineAlgorithm(agglomerate.main.algorithms.algorithm.Algorithm):
     """
     Simple packing algorithm that places sprites in a horizontal row
 
@@ -31,10 +31,8 @@ class InlineAlgorithm(algorithm.Algorithm):
         highest_height = 0
 
         for s in sprites:
-            # place sprite, I want to assign s.position the VALUE of
-            # next_sprite_position, I dont want both to be the same object
-            # I need to make a copy? sounds simple but can't think of a better
-            # way to assign the next_sprite_position's VALUE
+            # make a copy otherwise all positions end pointing to the same
+            # object
             s.position = copy.copy(next_sprite_position)
             # set the next sprite position
             next_sprite_position.x += s.size.x
@@ -45,13 +43,14 @@ class InlineAlgorithm(algorithm.Algorithm):
         if settings.sheet_size.x == "auto":
             settings.sheet_size.x = next_sprite_position.x
         elif next_sprite_position.x > settings.sheet_size.x:
-            raise algorithm.AlgorithmOutOfSpaceException(
+            raise agglomerate.main.algorithms.algorithm.AlgorithmOutOfSpaceException(
                     "Given width it's too small")
 
         if settings.sheet_size.y == "auto":
             settings.sheet_size.y= highest_height
         elif highest_height > settings.sheet_size.y:
-            raise algorithm.AlgorithmOutOfSpaceException(
+            raise agglomerate.main.algorithms.algorithm.AlgorithmOutOfSpaceException(
                     "Given height it's too low")
 
-algorithm.register_algorithm("inline", InlineAlgorithm)
+agglomerate.main.algorithms.algorithm.register_algorithm(
+        "inline", InlineAlgorithm)
