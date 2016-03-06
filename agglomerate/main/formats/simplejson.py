@@ -1,8 +1,8 @@
-import agglomerate.main.formats.format
+import agglomerate.main.format
 import json
 
 
-class SimpleJSON(agglomerate.main.formats.format.Format):
+class SimpleJSON(agglomerate.main.format.Format):
     """
     A simple JSON output
     """
@@ -32,4 +32,4 @@ class SimpleJSON(agglomerate.main.formats.format.Format):
         return json.dumps(sprite_array, indent=4)
 
 
-agglomerate.main.formats.format.register_format("simplejson", SimpleJSON)
+format_class = SimpleJSON

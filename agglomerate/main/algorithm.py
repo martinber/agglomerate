@@ -1,4 +1,5 @@
 import abc
+import importlib
 
 
 class Algorithm:
@@ -44,7 +45,7 @@ class Algorithm:
 
 
 # -----------------------------------------------------------------------------
-# Registration of algorithms
+# Retrieval of algorithms
 # -----------------------------------------------------------------------------
 
 
@@ -59,33 +60,15 @@ class UnknownAlgorithmException(Exception):
         return "Unknown algorithm named " + algorithm_name
 
 
-# Dictionary of registered algorithms
-algorithms = {}
-
-
-def register_algorithm(name, algorithm):
-    """
-    Register an algorithm for get_algorithm function
-
-    :param str name: the name
-    :param class algorithm: the algorithm
-    """
-    algorithms[name] = algorithm
-
-
 def get_algorithm(name):
     """
-    Returns chosen algorithm
+    Returns an instance of the chosen algorithm.
 
     :param str name: algorithm name
-    :return: instance or the selected algorithm
+    :return: instance of the selected algorithm
     """
-    try:
-        algorithm = algorithms[name]
-    except KeyError:
-        raise UnknownAlgorithmException(name)
-
-    return algorithm()
+    module = importlib.import_module("agglomerate.main.algorithms." + name)
+    return module.algorithm_class()
 
 
 # -----------------------------------------------------------------------------

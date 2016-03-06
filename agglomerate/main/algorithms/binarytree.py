@@ -1,8 +1,8 @@
-import agglomerate.main.algorithms.algorithm
+import agglomerate.main.algorithm
 from agglomerate.main.math import Vector2
 
 
-class BinaryTreeAlgorithm(agglomerate.main.algorithms.algorithm.Algorithm):
+class BinaryTreeAlgorithm(agglomerate.main.algorithm.Algorithm):
     """
     Simple packing based on the binary tree algorithm
 
@@ -255,5 +255,5 @@ class BinaryTreeAlgorithm(agglomerate.main.algorithms.algorithm.Algorithm):
         # Update settings
         settings.sheet_size = root_node.size
 
-agglomerate.main.algorithms.algorithm.register_algorithm(
-        "binarytree", BinaryTreeAlgorithm)
+
+algorithm_class = BinaryTreeAlgorithm

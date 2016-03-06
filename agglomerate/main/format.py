@@ -1,4 +1,5 @@
 import abc
+import importlib
 
 
 class Format:
@@ -45,33 +46,15 @@ class UnknownFormatException(Exception):
         return "Unknown format named " + format_name
 
 
-# Dictionary of registered formats
-formats = {}
-
-
-def register_format(name, format):
-    """
-    Register an format for get_format function
-
-    :param str name: the name
-    :param class format: the format class
-    """
-    formats[name] = format
-
-
 def get_format(name):
     """
-    Returns chosen format
+    Returns an instance of the chosen format.
 
     :param str name: format name
-    :return: instance or the selected format
+    :return: instance of the selected format
     """
-    try:
-        format = formats[name]
-    except KeyError:
-        raise UnknownFormatException(name)
-
-    return format()
+    module = importlib.import_module("agglomerate.main.formats." + name)
+    return module.format_class()
 
 
 # -----------------------------------------------------------------------------

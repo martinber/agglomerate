@@ -4,7 +4,7 @@ import agglomerate.main.packer
 import agglomerate.main.settings
 import agglomerate.main.items
 import agglomerate.main.math
-import agglomerate.main.formats.format
+import agglomerate.main.format
 
 import argparse
 import json
@@ -202,7 +202,7 @@ def _process_parameters(sprites_paths, settings):
     if os.path.splitext(settings.output_coordinates_path)[1] == "":
         # add the suggested extension by the format
         chosen_format = \
-                agglomerate.main.formats.format.get_format(settings.format)
+                agglomerate.main.format.get_format(settings.format)
 
         settings.output_coordinates_path += "." + \
                 chosen_format.suggested_extension

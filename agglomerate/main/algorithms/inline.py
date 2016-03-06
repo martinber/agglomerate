@@ -1,9 +1,9 @@
-import agglomerate.main.algorithms.algorithm
+import agglomerate.main.algorithm
 from agglomerate.main.math import Vector2
 import copy
 
 
-class InlineAlgorithm(agglomerate.main.algorithms.algorithm.Algorithm):
+class InlineAlgorithm(agglomerate.main.algorithm.Algorithm):
     """
     Simple packing algorithm that places sprites in a horizontal row
 
@@ -43,14 +43,14 @@ class InlineAlgorithm(agglomerate.main.algorithms.algorithm.Algorithm):
         if settings.sheet_size.x == "auto":
             settings.sheet_size.x = next_sprite_position.x
         elif next_sprite_position.x > settings.sheet_size.x:
-            raise agglomerate.main.algorithms.algorithm.AlgorithmOutOfSpaceException(
+            raise agglomerate.main.algorithm.AlgorithmOutOfSpaceException(
                     "Given width it's too small")
 
         if settings.sheet_size.y == "auto":
             settings.sheet_size.y= highest_height
         elif highest_height > settings.sheet_size.y:
-            raise agglomerate.main.algorithms.algorithm.AlgorithmOutOfSpaceException(
+            raise agglomerate.main.algorithm.AlgorithmOutOfSpaceException(
                     "Given height it's too low")
 
-agglomerate.main.algorithms.algorithm.register_algorithm(
-        "inline", InlineAlgorithm)
+
+algorithm_class = InlineAlgorithm
