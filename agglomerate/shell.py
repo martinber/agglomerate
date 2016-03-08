@@ -19,7 +19,7 @@ Commandline interface for the packer.
 Allows parameters as arguments, but also can load parameters from a json file
 """
 
- 
+
 _default_algorithm = "binarytree"
 _default_format = "simplejson"
 _default_output_sheet_path = "sheet"
@@ -108,7 +108,8 @@ def _load_parameters_from_arguments(args):
     sprite_paths = args.images
 
     # Create transitory settings
-    settings = agglomerate.main.settings.Settings(args.algorithm, args.format)
+    settings = agglomerate.main.settings. \
+            SheetSettings(args.algorithm, args.format)
     settings.output_sheet_path = args.output[0]
     settings.output_coordinates_path = args.output[1]
     settings.output_sheet_format = args.image_format
@@ -139,7 +140,7 @@ def _load_parameters_from_file(path):
     settings_dict = root["settings"]
 
     # create transitory settings
-    settings = agglomerate.main.settings.Settings.from_dict(settings_dict)
+    settings = agglomerate.main.settings.SheetSettings.from_dict(settings_dict)
 
     return (sprites_paths, settings)
 
@@ -174,12 +175,12 @@ def _process_parameters(sprites_paths, settings):
 
     # the color given by the user is a string, we need to create the Color
     # instance
-    if isinstance(settings.background_color, basestring):
+    if isinstance(settings.background_color, str):
         settings.background_color = \
                 agglomerate.main.color.Color.from_hex(settings.background_color)
 
     # the size given by the user is a string, we need to create the Vector2
-    if isinstance(settings.sheet_size, basestring):
+    if isinstance(settings.sheet_size, str):
         settings.sheet_size = _parse_size(settings.sheet_size)
 
     if settings.output_sheet_format != None:
@@ -221,7 +222,7 @@ def _create_parameters_file(path):
 
     :param str path: path where to save file
     """
-    settings = agglomerate.main.settings.Settings(
+    settings = agglomerate.main.settings.SheetSettings(
             _default_algorithm, _default_format)
 
     settings_dict = settings.to_dict()

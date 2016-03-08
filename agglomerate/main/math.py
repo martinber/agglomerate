@@ -21,6 +21,7 @@ class Vector2:
 
         Tuple must be (x, y)
         """
+        x, y = tuple
         return Vector2(x, y)
 
 

@@ -6,7 +6,7 @@ class Algorithm:
     """
     Base class for all algorithms
 
-    Decides sprites placement and sheet size if isn't specified. Has a
+    Decides items placement and sheet size if isn't specified. Has a
     "supports" dictionary
 
     **Supports dictionary**
@@ -19,7 +19,7 @@ class Algorithm:
     - auto_square_sheet_size: if the algorithm supports defining a squared
                               sheet, ignored if auto_sheet_size is False
     - auto_power_of_two_sheet_size: if the algorithm supports defining a
-                                    power-of-two sized sheet, ignored if 
+                                    power-of-two sized sheet, ignored if
                                     auto_sheet_size is False
     """
     supports = {
@@ -31,13 +31,13 @@ class Algorithm:
                 "auto_square_sheet_size": False,
                 "auto_power_of_two_sheet_size": False
                }
-    #supports_rotation = False
-    #supports_sheet_size_selection = False
 
     @abc.abstractmethod
     def pack(self, sprites, settings):
         """
-        Sets sprites positions accordingly, also modifies settings if neccesary
+        Sets items positions accordingly, also modifies settings if neccesary
+        (for example setting the size). Can accept a Settings instance or a
+        SheetSettings instance.
 
         :param list sprites: list of sprite objects
         :param settings: settings object

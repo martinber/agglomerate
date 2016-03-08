@@ -5,11 +5,18 @@ import agglomerate.main.math
 class Item:
     """
     Represents a sprite or a group of sprites, with a rectangular shape.
+    Something that will be managed by an algorithm.
+
+    Sprites can be cropped but groups not.
+
+    An algorithm works with items, placing them and rotating if necessary,
+    algorithms can crop sprites but can't crop groups, so they need to check the
+    type field.
 
     **Fields**
     position
-        Vector2 position in the sheet in pixels, top-left corner regardless of
-        rotation.
+        Vector2 position in the container (sheet or group) in pixels, top-left
+        corner regardless of rotation.
     size
         Vector2 in pixels of the sprite in the sheet
     rotated
@@ -29,9 +36,11 @@ class Item:
         self.type = None
 
 
-class Sprite:
+class Sprite(Item):
     """
-    Contains a PIL image and it's metadata
+    Item that contains a PIL image and it's metadata.
+
+    Sprites can be cropped analysing the images.
 
     **Fields**
     image
@@ -77,8 +86,7 @@ class Sprite:
 
         self.position = None
 
-        w, h = self.image.size
-        self.size = agglomerate.main.math.Vector2(w, h)
+        self.size = agglomerate.main.math.Vector2.from_tuple(self.image.size)
         self.original_size = self.size
 
         self.crop_l = 0

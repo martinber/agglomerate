@@ -4,11 +4,113 @@ import agglomerate.main.color
 
 class Settings:
     """
-    Keeps track of all the packer settings
+    Keeps track of a group settings, this instance is for algorithms, can
+    represent an entire sheet or a group
 
     **Settings**
     algorithm
         name of the algorithm to use
+    allow
+        dictionary containing allowed settings
+    require
+        dictionary containing required settings
+    sheet_size
+        Vector2 that contains size of the generated sprite sheet image,
+        values can be "auto"
+
+    **Allowed dictionary**
+    - rotation: True if the user allows the rotation of sprites
+    - cropping: True if the user allows cropping of sprites
+
+    **Required dictionary**
+    - square_sheet_size: True if a squared sheet is required
+    - power_of_two_sheet_size: True if power-of-two dimensions are required
+    - padding: Padding to apply to sprites, can be False or an integer
+    """
+    def __init__(self, algorithm=None):
+        """
+        Creates a settings object.
+
+        Sets remaining options to default values, must specify an algorithm,
+        because there is no default algorithm.
+
+        **Default values**
+        - algorithm: None
+
+        - allow
+            - "rotation": False
+            - "cropping": False
+
+        - require
+            - "square_sheet_size": False
+            - "power_of_two_sheet_size": False
+            - "padding": False
+
+        - sheet_size: both x and y set to auto
+        """
+        self.algorithm = algorithm
+
+        self.allow = {
+                     "rotation": False,
+                     "cropping": False
+                     }
+
+        self.require = {
+                        "square_sheet_size": False,
+                        "power_of_two_sheet_size": False,
+                        "padding": False
+                        }
+
+        self.sheet_size = agglomerate.main.math.Vector2("auto", "auto")
+
+
+    @classmethod
+    def from_dict(cls, dictionary):
+        """
+        Returns a Settings instance with values set from a dictionary.
+
+        All values must be in the dictionary, sheet_size value must be also a
+        dictionary, background_color must be a hex value string
+        """
+        # create a settings instance
+        s = Settings()
+
+        # fill it with the dictionary values
+        s.algorithm = dictionary["algorithm"]
+        s.allow = dictionary["allow"]
+        s.require = dictionary["require"]
+
+        # sheet_size is a dictionary, we need to create a Vector2 instance
+        # Vector2 can be initialized from a dict
+        s.sheet_size = agglomerate.main.math.Vector2.from_dict(
+                dictionary["sheet_size"])
+
+        return s
+
+
+    def to_dict(self):
+        """
+        Returns a dictionary of the fields in the settings instance. Also
+        converts sheet_size to a dictionary and beckground_color to a hex code
+        """
+        return {
+            "algorithm": self.algorithm,
+            "allow": self.allow,
+            "require": self.require,
+            # sheet size is an object, we need to store it also as a dict
+            "sheet_size": self.sheet_size.to_dict(),
+        }
+
+
+class SheetSettings(Settings):
+    """
+    Keeps track of all the sheet settings, this is valid only for the entire
+    sheet, groups use Settings instead. This object is used by the packer and
+    the formats
+
+    Inherits the settings set in the Settings class and adds new ones:
+
+    **Added settings**
     format
         name of the coordinates file format
     output_sheet_path
@@ -26,13 +128,6 @@ class Settings:
     output_sheet_color_mode
         color mode used for saving, this argument is given to Pillow's
         Image.new() method, see Pillow documentation for more info
-    allow
-        dictionary containing allowed settings
-    require
-        dictionary containing required settings
-    sheet_size
-        Vector2 that contains size of the generated sprite sheet image,
-        values can be "auto"
     background_color
         color to use as the background of the sheet
 
@@ -46,15 +141,9 @@ class Settings:
     - "RGBA"
     - "RGB"
     - "CYMK" but messes colors, I don't know how it works
-
-    **Allowed dictionary**
-    - rotation: True if the user allows the rotation of sprites
-    - cropping: True if the user allows cropping of sprites
-
-    **Required dictionary**
-    - square_sheet_size: True if a squared sheet is required
-    - power_of_two_sheet_size: True if power-of-two dimensions are required
-    - padding: Padding to apply to sprites, can be False or an integer
+    - "1"
+    - "L"
+    - "P" doesn't work, needs more arguments
     """
     def __init__(self, algorithm=None, format=None,
                  output_sheet_path=None, output_coordinates_path=None):
@@ -70,7 +159,6 @@ class Settings:
         a default one based on the format chosen
 
         **Default values**
-        - algorithm: None
         - format: None
         - output_sheet_path: None
         - output_coordinates_path: None
@@ -78,19 +166,9 @@ class Settings:
         - output_sheet_format: None
         - output_sheet_color_mode: "RGBA"
 
-        - allow
-            - "rotation": False
-            - "cropping": False
-
-        - require
-            - "square_sheet_size": False
-            - "power_of_two_sheet_size": False
-            - "padding": False
-
-        - sheet_size: both x and y set to auto
         - background_color: transparent (#00000000)
         """
-        self.algorithm = algorithm
+        super().__init__(algorithm)
         self.format = format
         self.output_sheet_path = None
         self.output_coordinates_path = None
@@ -98,18 +176,6 @@ class Settings:
         self.output_sheet_format = None
         self.output_sheet_color_mode = "RGBA"
 
-        self.allow = {
-                     "rotation": False,
-                     "cropping": False
-                     }
-
-        self.require = {
-                        "square_sheet_size": False,
-                        "power_of_two_sheet_size": False,
-                        "padding": False
-                        }
-
-        self.sheet_size = agglomerate.main.math.Vector2("auto", "auto")
         self.background_color = \
                 agglomerate.main.color.Color.from_hex("#00000000")
 
@@ -123,7 +189,7 @@ class Settings:
         dictionary, background_color must be a hex value string
         """
         # create a settings instance
-        s = Settings()
+        s = SheetSettings()
 
         # fill it with the dictionary values
         s.algorithm = dictionary["algorithm"]

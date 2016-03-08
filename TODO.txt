@@ -1,2 +1,3 @@
 - Support individual sprite resizing
 - Try supported pillow formats and modes
+- See what to do in rotated sprites in rotated groups

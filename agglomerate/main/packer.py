@@ -67,10 +67,11 @@ def _generate_sheet(sprites, settings):
         print("Placed in")
         print(s.position)
 
+    # Now in Python3 this is not needed?
     # if output_sheet_format is an unicode string, pillow has problems
-    if isinstance(settings.output_sheet_format, unicode):
-        settings.output_sheet_format = \
-                settings.output_sheet_format.encode("ascii", "ignore")
+    # if isinstance(settings.output_sheet_format, unicode):
+    #     settings.output_sheet_format = \
+    #             settings.output_sheet_format.encode("ascii", "ignore")
 
     sheet.save(settings.output_sheet_path, settings.output_sheet_format)
 
