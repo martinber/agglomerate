@@ -113,7 +113,11 @@ class Sprite(Item):
 class Group(Item):
     """
     Has a list of items, a settings instance, and the inherited attributes
-    from Item
+    from Item.
+
+    Having a setting instance results in a duplicate size property:
+    settings.size and the size property inherited from Item. Both point to the
+    same Vector2 instance.
 
     Example tree::
 
@@ -135,6 +139,13 @@ class Group(Item):
         self.items = items
         self.settings = settings
         self.position = None
-        self.size = settings.size
         self.rotated = False
         self.type = "group"
+
+    @property
+    def size(self):
+        return self.settings.size
+
+    @size.setter
+    def size(self, value):
+        self.settings.size = value
