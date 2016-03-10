@@ -22,7 +22,7 @@ class Item:
     rotated
         true if the item was rotated 90 degrees clockwise by the algorithm
     type
-        string, can be "sprite", "group" or None
+        string, can be "sprite", "group", "parameters" or None
     """
 
     def __init__(self, position=agglomerate.main.math.Vector2(),
@@ -34,6 +34,7 @@ class Item:
         self.size = size
         self.rotated = False
         self.type = None
+
 
 
 class Sprite(Item):
@@ -94,6 +95,8 @@ class Sprite(Item):
         self.crop_r = 0
         self.crop_d = 0
 
+        self.type = "sprite"
+
     def get_name_from_path(self, path):
         """
         Generates a name from the file name
@@ -105,3 +108,30 @@ class Sprite(Item):
         :rtype: str
         """
         return os.path.basename(path)
+
+
+class Group(Item):
+    """
+    Has a list of items, a settings instance, and the inherited attributes
+    from Item
+
+    Example tree::
+
+        group
+        ├─ items (list)
+        |  ├─ group1
+        |  |  ├─ items (list)
+        |  |  └─ settings
+        |  ├─ group2
+        |  |  ├─ items (list)
+        |  |  └─ settings
+        |  ├─ sprite1
+        |  ├─ sprite2
+        |  └─ ...
+        |
+        └─ settings
+    """
+    def __init__(self, items, settings):
+        self.items = items
+        self.settings = settings
+        self.type = "group"

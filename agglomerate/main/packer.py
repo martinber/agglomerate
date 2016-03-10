@@ -1,17 +1,10 @@
-# We want to import every algorithm, also imports module "algorithm"
-#from agglomerate.main.algorithms import *
-# We want to import every format, also imports module "format"
-#from agglomerate.main.formats import *
 import agglomerate.main.algorithm
-#import agglomerate.main.algorithms.binarytree
-#import agglomerate.main.algorithms.inline
 import agglomerate.main.format
-
 
 import PIL
 
 
-def pack(sprites, settings):
+def pack(params):
     """
     Packs the sprites.
 
@@ -26,31 +19,84 @@ def pack(sprites, settings):
     output_coordinates_path doesn't have extension, the packer will use
     a default one based on the format chosen
 
-    :param list sprites: list of sprite objects
-    :param settings: settings object
+    :param params: parameters object
+    """
+    # get an instance of the format named in the settings
+    format = agglomerate.main.format.get_format(params.settings.format)
+
+    # check if the chosen output format is compatible with the specified
+    # sheet settings
+    compatible, __, __ = agglomerate.main.format. \
+            check_compatibility(format, params.settings)
+
+    if not compatible:
+        raise IncompatibleFormatException(params.settings.format)
+
+    # pack everything recusively!
+    _pack_group(params)
+    # get all the sprites in the params group and get absolute values of the
+    # positions and rotation
+    sprites = _get_sprites(params)
+    # join together the sprites and save the image
+    _generate_sheet(sprites, params.settings)
+    # generate the coordinates file string
+    coordinates = format.generate(sprites, params.settings)
+    # save the coordinates file
+    _save_coordinates(coordinates, params.settings)
+
+
+def _pack_group(group):
+    """
+    Packs a group of items recursively. Setting values on items.
+
+    Checks compatibility between the algorithm, the format and the settings
+    raising exceptions accordingly, but it is recommended to check
+    compatibility before calling this function so you can print more
+    warnings and more information to the user.
+
+    :param group: group to pack
     """
     # Get an instance of the algorithm and format named in the settings
-    a = agglomerate.main.algorithm.get_algorithm(settings.algorithm)
-    f = agglomerate.main.format.get_format(settings.format)
+    a = agglomerate.main.algorithm.get_algorithm(group.settings.algorithm)
 
     # Check if the chosen algorithm and output format is compatible with
     # the specified settings
-    compatible, __, __ = agglomerate.main.algorithm.check_compatibility(a, settings)
+    compatible, __, __ = \
+            agglomerate.main.algorithm.check_compatibility(a, group.settings)
+
     if not compatible:
         raise IncompatibleAlgorithmException(settings.algorithm)
 
-    compatible, __, __ = agglomerate.main.format.check_compatibility(f, settings)
-    if not compatible:
-        raise IncompatibleFormatException(settings.format)
-
     # Run the algorithm
-    a.pack(sprites, settings)
-    # Join together the sprites and save the image
-    _generate_sheet(sprites, settings)
-    # Generate the coordinates file string
-    coordinates = f.generate(sprites, settings)
-    # Save the coordinates file
-    _save_coordinates(coordinates, settings)
+    a.pack(group.items, group.settings)
+
+    # Check all items and pack the groups
+    for i in group.items:
+        # check if item.type = "parameters" is not neccesary because only the
+        # root can be "parameters"
+        if i.type == "group":
+            _pack_group(i)
+
+
+def _get_sprites(group):
+    """
+    Extracts all the sprites from the group and returns a list of sprites
+    placed absolutely (not relative to their original groups), also calls this
+    function recursively on child groups
+    """
+    sprites = []
+
+    for i in group.items:
+        i.position += group.position
+        # TODO see what to do with rotations
+        if i.type == "sprite":
+            sprites.append(i)
+        elif i.type == "group":
+            sprites.extend(i)
+        else:
+            sys.exit("An item has no type, abort!")
+
+    return sprites
 
 
 def _generate_sheet(sprites, settings):
