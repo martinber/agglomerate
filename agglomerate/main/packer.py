@@ -67,15 +67,16 @@ def _pack_group(group):
     if not compatible:
         raise IncompatibleAlgorithmException(settings.algorithm)
 
-    # Run the algorithm
-    a.pack(group.items, group.settings)
-
     # Check all items and pack the groups
     for i in group.items:
         # check if item.type = "parameters" is not neccesary because only the
         # root can be "parameters"
         if i.type == "group":
             _pack_group(i)
+
+    # Run the algorithm
+    a.pack(group.items, group.settings)
+
 
 
 def _get_sprites(group):
@@ -92,7 +93,7 @@ def _get_sprites(group):
         if i.type == "sprite":
             sprites.append(i)
         elif i.type == "group":
-            sprites.extend(i)
+            sprites.extend(_get_sprites(i))
         else:
             sys.exit("An item has no type, abort!")
 
@@ -105,7 +106,7 @@ def _generate_sheet(sprites, settings):
     algorithm and then saves the image.
     """
     sheet = PIL.Image.new(settings.output_sheet_color_mode,
-                          settings.sheet_size.to_tuple(),
+                          settings.size.to_tuple(),
                           settings.background_color.to_tuple())
 
     for s in sprites:

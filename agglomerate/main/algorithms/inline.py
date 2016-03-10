@@ -15,9 +15,9 @@ class InlineAlgorithm(agglomerate.main.algorithm.Algorithm):
                 "cropping": False,
                 "padding": False,
 
-                "auto_sheet_size": True,
-                "auto_square_sheet_size": False,
-                "auto_power_of_two_sheet_size": False,
+                "auto_size": True,
+                "auto_square_size": False,
+                "auto_power_of_two_size": False,
                }
 
     def pack(self, sprites, settings):
@@ -30,6 +30,7 @@ class InlineAlgorithm(agglomerate.main.algorithm.Algorithm):
         # we set the sheet height to this value
         highest_height = 0
 
+
         for s in sprites:
             # make a copy otherwise all positions end pointing to the same
             # object
@@ -40,15 +41,15 @@ class InlineAlgorithm(agglomerate.main.algorithm.Algorithm):
             if s.size.y > highest_height:
                 highest_height = s.size.y
 
-        if settings.sheet_size.x == "auto":
-            settings.sheet_size.x = next_sprite_position.x
-        elif next_sprite_position.x > settings.sheet_size.x:
+        if settings.size.x == "auto":
+            settings.size.x = next_sprite_position.x
+        elif next_sprite_position.x > settings.size.x:
             raise agglomerate.main.algorithm.AlgorithmOutOfSpaceException(
                     "Given width it's too small")
 
-        if settings.sheet_size.y == "auto":
-            settings.sheet_size.y= highest_height
-        elif highest_height > settings.sheet_size.y:
+        if settings.size.y == "auto":
+            settings.size.y= highest_height
+        elif highest_height > settings.size.y:
             raise agglomerate.main.algorithm.AlgorithmOutOfSpaceException(
                     "Given height it's too low")
 

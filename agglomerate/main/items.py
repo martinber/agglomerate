@@ -134,4 +134,7 @@ class Group(Item):
     def __init__(self, items, settings):
         self.items = items
         self.settings = settings
+        self.position = None
+        self.size = settings.size
+        self.rotated = False
         self.type = "group"

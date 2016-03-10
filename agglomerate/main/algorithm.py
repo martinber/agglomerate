@@ -14,22 +14,22 @@ class Algorithm:
     - cropping: True if the algorithm supports sprite cropping
     - padding: True if the algorithm supports sprite padding
 
-    - auto_sheet_size: whether the algorithm supports deciding the size of the
+    - auto_size: whether the algorithm supports deciding the size of the
                        sheet
-    - auto_square_sheet_size: if the algorithm supports defining a squared
-                              sheet, ignored if auto_sheet_size is False
-    - auto_power_of_two_sheet_size: if the algorithm supports defining a
+    - auto_square_size: if the algorithm supports defining a squared
+                              sheet, ignored if auto_size is False
+    - auto_power_of_two_size: if the algorithm supports defining a
                                     power-of-two sized sheet, ignored if
-                                    auto_sheet_size is False
+                                    auto_size is False
     """
     supports = {
                 "rotation": False,
                 "cropping": False,
                 "padding": False,
 
-                "auto_sheet_size": False,
-                "auto_square_sheet_size": False,
-                "auto_power_of_two_sheet_size": False
+                "auto_size": False,
+                "auto_square_size": False,
+                "auto_power_of_two_size": False
                }
 
     @abc.abstractmethod
@@ -116,23 +116,23 @@ def check_compatibility(alg, settings):
     incompatibilities = [None]
     warnings = [None]
 
-    w, h = settings.sheet_size.to_tuple()
-    requires_sheet_size_selection = (w == "auto" or h == "auto")
+    w, h = settings.size.to_tuple()
+    requires_size_selection = (w == "auto" or h == "auto")
 
-    if requires_sheet_size_selection and not \
-            alg.supports["auto_sheet_size"]:
+    if requires_size_selection and not \
+            alg.supports["auto_size"]:
 
         compatible = False
         incompatibilities.append(IncompatibilityReason.AUTO_SHEET_SIZE_REQUIRED)
 
-        if settings.require["auto_square_sheet_size"] and not \
-                alg.supports["auto_square_sheet_size"]:
+        if settings.require["auto_square_size"] and not \
+                alg.supports["auto_square_size"]:
             compatible = False
             incompatibilities.append(IncompatibilityReason.
                     AUTO_SQUARE_SHEET_SIZE_REQUIRED)
 
-        if settings.require["auto_power_of_two_sheet_size"] and not \
-                alg.supports["auto_power_of_two_sheet_size"]:
+        if settings.require["auto_power_of_two_size"] and not \
+                alg.supports["auto_power_of_two_size"]:
             compatible = False
             incompatibilities.append(IncompatibilityReason.
                     AUTO_POWER_OF_TWO_SHEET_SIZE_REQUIRED)

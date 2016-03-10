@@ -133,7 +133,7 @@ def _load_parameters_from_arguments(args):
     # the _process_parameters method will parse the string into a Color
     settings.background_color = args.background_color
     # the _process_parameters method will parse it later into a Vector2
-    settings.sheet_size = args.size
+    settings.size = args.size
 
     # create the parameters instance
     params = agglomerate.main.parameters.Parameters(items, settings)
@@ -178,7 +178,7 @@ def _process_parameters_settings(params):
     params.settings that are processed:
         - background_color: If it is a string we create the Color assuming that
                 the string is an hex value
-        - sheet_size: If it is a string we create the Vector2 using
+        - size: If it is a string we create the Vector2 using
                 _parse_size()
         - output_sheet_format: If given, we strip the dot at the start of the
                 string
@@ -194,8 +194,8 @@ def _process_parameters_settings(params):
                 Color.from_hex(params.settings.background_color)
 
     # the size given by the user is a string, we need to create the Vector2
-    if isinstance(params.settings.sheet_size, str):
-        params.settings.sheet_size = _parse_size(params.settings.sheet_size)
+    if isinstance(params.settings.size, str):
+        params.settings.size = _parse_size(params.settings.size)
 
     if params.settings.output_sheet_format != None:
         # check the given format, the format shouldn't start with a dot
@@ -261,8 +261,8 @@ def _process_parameters_settings(params):
                 agglomerate.main.color.Color.from_hex(settings.background_color)
 
     # the size given by the user is a string, we need to create the Vector2
-    if isinstance(settings.sheet_size, str):
-        settings.sheet_size = _parse_size(settings.sheet_size)
+    if isinstance(settings.size, str):
+        settings.size = _parse_size(settings.size)
 
     if settings.output_sheet_format != None:
         # check the given format, the format shouldn't start with a dot

@@ -30,7 +30,7 @@ class Parameters(agglomerate.main.items.Group):
         super().__init__(items, settings)
 
         self.position = agglomerate.main.math.Vector2(0, 0)
-        self.size = settings.sheet_size
+        self.size = settings.size
         self.rotated = False
 
         self.type = "parameters"

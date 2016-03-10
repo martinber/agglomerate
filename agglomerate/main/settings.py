@@ -14,7 +14,7 @@ class Settings:
         dictionary containing allowed settings
     require
         dictionary containing required settings
-    sheet_size
+    size
         Vector2 that contains size of the generated sprite sheet image,
         values can be "auto"
 
@@ -23,8 +23,8 @@ class Settings:
     - cropping: True if the user allows cropping of sprites
 
     **Required dictionary**
-    - square_sheet_size: True if a squared sheet is required
-    - power_of_two_sheet_size: True if power-of-two dimensions are required
+    - square_size: True if a squared sheet is required
+    - power_of_two_size: True if power-of-two dimensions are required
     - padding: Padding to apply to sprites, can be False or an integer
     """
     def __init__(self, algorithm=None):
@@ -42,11 +42,11 @@ class Settings:
             - "cropping": False
 
         - require
-            - "square_sheet_size": False
-            - "power_of_two_sheet_size": False
+            - "square_size": False
+            - "power_of_two_size": False
             - "padding": False
 
-        - sheet_size: both x and y set to auto
+        - size: both x and y set to auto
         """
         self.algorithm = algorithm
 
@@ -56,12 +56,12 @@ class Settings:
                      }
 
         self.require = {
-                        "square_sheet_size": False,
-                        "power_of_two_sheet_size": False,
+                        "square_size": False,
+                        "power_of_two_size": False,
                         "padding": False
                         }
 
-        self.sheet_size = agglomerate.main.math.Vector2("auto", "auto")
+        self.size = agglomerate.main.math.Vector2("auto", "auto")
 
 
     @classmethod
@@ -69,7 +69,7 @@ class Settings:
         """
         Returns a Settings instance with values set from a dictionary.
 
-        All values must be in the dictionary, sheet_size value must be also a
+        All values must be in the dictionary, size value must be also a
         dictionary, background_color must be a hex value string
         """
         # create a settings instance
@@ -80,10 +80,10 @@ class Settings:
         s.allow = dictionary["allow"]
         s.require = dictionary["require"]
 
-        # sheet_size is a dictionary, we need to create a Vector2 instance
+        # size is a dictionary, we need to create a Vector2 instance
         # Vector2 can be initialized from a dict
-        s.sheet_size = agglomerate.main.math.Vector2.from_dict(
-                dictionary["sheet_size"])
+        s.size = agglomerate.main.math.Vector2.from_dict(
+                dictionary["size"])
 
         return s
 
@@ -91,14 +91,14 @@ class Settings:
     def to_dict(self):
         """
         Returns a dictionary of the fields in the settings instance. Also
-        converts sheet_size to a dictionary and beckground_color to a hex code
+        converts size to a dictionary and beckground_color to a hex code
         """
         return {
             "algorithm": self.algorithm,
             "allow": self.allow,
             "require": self.require,
             # sheet size is an object, we need to store it also as a dict
-            "sheet_size": self.sheet_size.to_dict(),
+            "size": self.size.to_dict(),
         }
 
 
@@ -185,7 +185,7 @@ class SheetSettings(Settings):
         """
         Returns a Settings instance with values set from a dictionary.
 
-        All values must be in the dictionary, sheet_size value must be also a
+        All values must be in the dictionary, size value must be also a
         dictionary, background_color must be a hex value string
         """
         # create a settings instance
@@ -201,10 +201,10 @@ class SheetSettings(Settings):
         s.allow = dictionary["allow"]
         s.require = dictionary["require"]
 
-        # sheet_size is a dictionary, we need to create a Vector2 instance
+        # size is a dictionary, we need to create a Vector2 instance
         # Vector2 can be initialized from a dict
-        s.sheet_size = agglomerate.main.math.Vector2.from_dict(
-                dictionary["sheet_size"])
+        s.size = agglomerate.main.math.Vector2.from_dict(
+                dictionary["size"])
 
         # background_color is a hex code string, we need a Color instance
         s.background_color = agglomerate.main.color.Color.from_hex(
@@ -216,7 +216,7 @@ class SheetSettings(Settings):
     def to_dict(self):
         """
         Returns a dictionary of the fields in the settings instance. Also
-        converts sheet_size to a dictionary and beckground_color to a hex code
+        converts size to a dictionary and beckground_color to a hex code
         """
         return {
             "algorithm": self.algorithm,
@@ -228,7 +228,7 @@ class SheetSettings(Settings):
             "allow": self.allow,
             "require": self.require,
             # sheet size is an object, we need to store it also as a dict
-            "sheet_size": self.sheet_size.to_dict(),
+            "size": self.size.to_dict(),
             # background_color is a object, we need to store it as a hex string
             "background_color": self.background_color.to_hex()
         }

@@ -14,9 +14,9 @@ class BinaryTreeAlgorithm(agglomerate.main.algorithm.Algorithm):
                 "cropping": False,
                 "padding": False,
 
-                "auto_sheet_size": True,
-                "auto_square_sheet_size": False,
-                "auto_power_of_two_sheet_size": False,
+                "auto_size": True,
+                "auto_square_size": False,
+                "auto_power_of_two_size": False,
                }
 
     def pack(self, sprites, settings):
@@ -44,16 +44,16 @@ class BinaryTreeAlgorithm(agglomerate.main.algorithm.Algorithm):
             sprite and returns the new root_node
             """
             # Size defined by the user
-            given_sheet_size = settings.sheet_size
+            given_size = settings.size
 
             # Check directions where we can extend
             sprite_fits_extending_below = (sprite.size.x <= root_node.size.x)
             sprite_fits_extending_right = (sprite.size.y <= root_node.size.y)
 
-            can_extend_below = (given_sheet_size.y == "auto" and
+            can_extend_below = (given_size.y == "auto" and
                                 sprite_fits_extending_below)
 
-            can_extend_right = (given_sheet_size.x == "auto" and
+            can_extend_right = (given_size.x == "auto" and
                                 sprite_fits_extending_right)
 
             # Also check where we should extend if we want to get closer to a
@@ -236,7 +236,7 @@ class BinaryTreeAlgorithm(agglomerate.main.algorithm.Algorithm):
         sort_sprites(sprites)
 
         # If a dimension is "auto", set it to the size of the first sprite
-        w, h = settings.sheet_size.to_tuple()
+        w, h = settings.size.to_tuple()
         if w == "auto":
             w = sprites[0].size.x
         if h == "auto":
@@ -253,7 +253,7 @@ class BinaryTreeAlgorithm(agglomerate.main.algorithm.Algorithm):
                 root_node = place_sprite_extending_sheet(s, root_node)
 
         # Update settings
-        settings.sheet_size = root_node.size
+        settings.size = root_node.size
 
 
 algorithm_class = BinaryTreeAlgorithm
