@@ -4,10 +4,10 @@ import importlib
 
 class Algorithm:
     """
-    Base class for all algorithms
+    Base class for all algorithms. Packs a group of items.
 
-    Decides items placement and sheet size if isn't specified. Has a
-    "supports" dictionary
+    Decides items placement and size if it isn't specified. Has a "supports"
+    dictionary
 
     **Supports dictionary**
     - rotation: whether the algorithm supports rotation of sprites
@@ -15,12 +15,11 @@ class Algorithm:
     - padding: True if the algorithm supports sprite padding
 
     - auto_size: whether the algorithm supports deciding the size of the
-                       sheet
-    - auto_square_size: if the algorithm supports defining a squared
-                              sheet, ignored if auto_size is False
-    - auto_power_of_two_size: if the algorithm supports defining a
-                                    power-of-two sized sheet, ignored if
-                                    auto_size is False
+            sheet
+    - auto_square_size: if the algorithm supports defining a squared sheet, 
+            ignored if auto_size is False
+    - auto_power_of_two_size: if the algorithm supports defining a power-of-two
+            sized sheet, ignored if auto_size is False
     """
     supports = {
                 "rotation": False,
@@ -33,7 +32,7 @@ class Algorithm:
                }
 
     @abc.abstractmethod
-    def pack(self, sprites, settings):
+    def pack(self, items, settings):
         """
         Sets items positions accordingly, also modifies settings if neccesary
         (for example setting the size). Can accept a Settings instance or a
@@ -67,7 +66,7 @@ def get_algorithm(name):
     :param str name: algorithm name
     :return: instance of the selected algorithm
     """
-    module = importlib.import_module("agglomerate.main.algorithms." + name)
+    module = importlib.import_module("agglomerate.algorithms." + name)
     return module.algorithm_class()
 
 

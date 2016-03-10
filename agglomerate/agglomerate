@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import agglomerate.shell
+import agglomerate.ui.shell
 
 def main():
-	shell.main()
+	agglomerate.ui.shell.main()
 
 if __name__ == '__main__':
 	main()

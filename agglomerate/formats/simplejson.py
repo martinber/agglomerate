@@ -1,8 +1,8 @@
-import agglomerate.main.format
+import agglomerate
 import json
 
 
-class SimpleJSON(agglomerate.main.format.Format):
+class SimpleJSON(agglomerate.Format):
     """
     A simple JSON output
     """

@@ -4,10 +4,10 @@ import importlib
 
 class Format:
     """
-    Base class for all coordinates file output formats
+    Base class for all coordinates file output formats.
 
     Creates a string defining sprites placement, has a "supports" dictionary
-    and a suggested extension
+    and a suggested extension.
 
     **Supports dictionary**
     - rotation: whether the format supports rotation of sprites
@@ -24,8 +24,8 @@ class Format:
         """
         Creates a string defining sprites placement
 
-        :param list sprites: list of sprite objects
-        :param settings: settings object
+        :param list sprites: list of Sprite objects
+        :param settings: SheetSettings object
         :return: string to be saved to a file
         """
 
@@ -53,7 +53,7 @@ def get_format(name):
     :param str name: format name
     :return: instance of the selected format
     """
-    module = importlib.import_module("agglomerate.main.formats." + name)
+    module = importlib.import_module("agglomerate.formats." + name)
     return module.format_class()
 
 

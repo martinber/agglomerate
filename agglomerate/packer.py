@@ -1,5 +1,5 @@
-import agglomerate.main.algorithm
-import agglomerate.main.format
+import agglomerate.algorithm
+import agglomerate.format
 
 import PIL
 
@@ -22,11 +22,11 @@ def pack(params):
     :param params: parameters object
     """
     # get an instance of the format named in the settings
-    format = agglomerate.main.format.get_format(params.settings.format)
+    format = agglomerate.format.get_format(params.settings.format)
 
     # check if the chosen output format is compatible with the specified
     # sheet settings
-    compatible, __, __ = agglomerate.main.format. \
+    compatible, __, __ = agglomerate.format. \
             check_compatibility(format, params.settings)
 
     if not compatible:
@@ -47,7 +47,7 @@ def pack(params):
 
 def _pack_group(group):
     """
-    Packs a group of items recursively. Setting values on items.
+    Packs a group of items recursively.
 
     Checks compatibility between the algorithm, the format and the settings
     raising exceptions accordingly, but it is recommended to check
@@ -57,12 +57,12 @@ def _pack_group(group):
     :param group: group to pack
     """
     # Get an instance of the algorithm and format named in the settings
-    a = agglomerate.main.algorithm.get_algorithm(group.settings.algorithm)
+    a = agglomerate.algorithm.get_algorithm(group.settings.algorithm)
 
     # Check if the chosen algorithm and output format is compatible with
     # the specified settings
     compatible, __, __ = \
-            agglomerate.main.algorithm.check_compatibility(a, group.settings)
+            agglomerate.algorithm.check_compatibility(a, group.settings)
 
     if not compatible:
         raise IncompatibleAlgorithmException(settings.algorithm)
@@ -102,7 +102,7 @@ def _get_sprites(group):
 
 def _generate_sheet(sprites, settings):
     """
-    Creates the sheet pasting the sprites in the locations given by the
+    Creates the sheet drawing the sprites in the locations given by the
     algorithm and then saves the image.
     """
     sheet = PIL.Image.new(settings.output_sheet_color_mode,

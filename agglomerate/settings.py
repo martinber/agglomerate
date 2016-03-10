@@ -1,11 +1,11 @@
-import agglomerate.main.math
-import agglomerate.main.color
+import agglomerate.math
+import agglomerate.util
 
 
 class Settings:
     """
     Keeps track of a group settings, this instance is for algorithms, can
-    represent an entire sheet or a group
+    represent an entire sheet or a group.
 
     **Settings**
     algorithm
@@ -61,7 +61,7 @@ class Settings:
                         "padding": False
                         }
 
-        self.size = agglomerate.main.math.Vector2("auto", "auto")
+        self.size = agglomerate.math.Vector2("auto", "auto")
 
 
     @classmethod
@@ -82,8 +82,7 @@ class Settings:
 
         # size is a dictionary, we need to create a Vector2 instance
         # Vector2 can be initialized from a dict
-        s.size = agglomerate.main.math.Vector2.from_dict(
-                dictionary["size"])
+        s.size = agglomerate.math.Vector2.from_dict(dictionary["size"])
 
         return s
 
@@ -106,7 +105,7 @@ class SheetSettings(Settings):
     """
     Keeps track of all the sheet settings, this is valid only for the entire
     sheet, groups use Settings instead. This object is used by the packer and
-    the formats
+    the formats. A Parameters instance contains a SheetSettings instance.
 
     Inherits the settings set in the Settings class and adds new ones:
 
@@ -177,7 +176,7 @@ class SheetSettings(Settings):
         self.output_sheet_color_mode = "RGBA"
 
         self.background_color = \
-                agglomerate.main.color.Color.from_hex("#00000000")
+                agglomerate.util.Color.from_hex("#00000000")
 
 
     @classmethod
@@ -203,11 +202,10 @@ class SheetSettings(Settings):
 
         # size is a dictionary, we need to create a Vector2 instance
         # Vector2 can be initialized from a dict
-        s.size = agglomerate.main.math.Vector2.from_dict(
-                dictionary["size"])
+        s.size = agglomerate.math.Vector2.from_dict(dictionary["size"])
 
         # background_color is a hex code string, we need a Color instance
-        s.background_color = agglomerate.main.color.Color.from_hex(
+        s.background_color = agglomerate.util.Color.from_hex(
                 dictionary["background_color"])
 
         return s

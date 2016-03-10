@@ -1,12 +1,11 @@
 from __future__ import print_function
 
-import agglomerate.main.packer
-import agglomerate.main.settings
-import agglomerate.main.items
-import agglomerate.main.math
-import agglomerate.main.format
-import agglomerate.main.parameters
-import agglomerate.main.util
+import agglomerate
+import agglomerate.packer
+import agglomerate.settings
+import agglomerate.math
+import agglomerate.format
+import agglomerate.util
 
 import argparse
 import json
@@ -83,35 +82,22 @@ def main():
     # parse and work
     args = parser.parse_args()
 
-    """
-    if args.subparser == "pack":
-        sprites_paths, settings = _load_parameters_from_arguments(args)
-        sprites, settings = _process_parameters(sprites_paths, settings)
-        agglomerate.main.packer.pack(sprites, settings)
-    elif args.subparser == "from":
-        sprites_paths, settings = _load_parameters_from_file(args.path)
-        sprites, settings = _process_parameters(sprites_paths, settings)
-        agglomerate.main.packer.pack(sprites, settings)
-    elif args.subparser == "new":
-        _create_parameters_file(args.path)
-    """
     if args.subparser == "pack":
         params = _load_parameters_from_arguments(args)
-        agglomerate.main.packer.pack(params)
+        agglomerate.packer.pack(params)
     elif args.subparser == "from":
         params = _load_parameters_from_file(args.path)
-        agglomerate.main.packer.pack(params)
+        agglomerate.packer.pack(params)
     elif args.subparser == "new":
         _create_parameters_file(args.path)
 
 
 def _load_parameters_from_arguments(args):
     """
-    Creates a transitory parameters instance from the arguments given to the
-    command, later should be processed by the _process_parameters method.
+    Loads the parameters from the commandline arguments.
 
     :param args: args from argparse
-    :return: tuple of sprites paths list and transitory settings instance
+    :return: parameters instance ready for packing
     """
 
     # sprite paths list
@@ -120,13 +106,12 @@ def _load_parameters_from_arguments(args):
     # parse the items to pack, we don't need groups here
     items = []
     for s in sprites_paths:
-        sprites_paths = agglomerate.main.util.get_matching_paths(i)
+        sprites_paths = agglomerate.util.get_matching_paths(i)
         for p in sprites_paths:
-            items.append(agglomerate.main.items.Sprite(p))
+            items.append(agglomerate.Sprite(p))
 
     # create transitory settings
-    settings = agglomerate.main.settings. \
-            SheetSettings(args.algorithm, args.format)
+    settings = agglomerate.SheetSettings(args.algorithm, args.format)
     settings.output_sheet_path = args.output[0]
     settings.output_coordinates_path = args.output[1]
     settings.output_sheet_format = args.image_format
@@ -136,19 +121,17 @@ def _load_parameters_from_arguments(args):
     settings.size = args.size
 
     # create the parameters instance
-    params = agglomerate.main.parameters.Parameters(items, settings)
+    params = agglomerate.Parameters(items, settings)
 
     return _process_parameters_settings(params)
 
 
 def _load_parameters_from_file(path):
     """
-    Creates a sprites paths list and a transitory settings instance from the
-    file given, later these should be processed by the _process_parameters
-    method.
+    Loads the parameters from a json file.
 
     :param path: path to parameters file
-    :return: tuple of sprites paths list and transitory settings instance
+    :return: parameters instance ready for packing
     """
     # Read json
     with open(path, "r") as f:
@@ -156,24 +139,14 @@ def _load_parameters_from_file(path):
 
     root = json.loads(json_string)
 
-    """
-    sprites_paths = root["sprites"]
-    settings_dict = root["settings"]
-
-    # create transitory settings
-    settings = agglomerate.main.settings.SheetSettings.from_dict(settings_dict)
-
-    # create the parameters instance
-    params = agglomerate.main.parameters.Parameters(sprites_paths, settings)
-    """
-
     params = _parse_group(root, True)
 
     return _process_parameters_settings(params)
 
 def _process_parameters_settings(params):
     """
-    Finishes building the parameters settings.
+    Helper function for _load_parameters_from_X. Finishes building the
+    parameters settings.
 
     params.settings that are processed:
         - background_color: If it is a string we create the Color assuming that
@@ -190,7 +163,7 @@ def _process_parameters_settings(params):
     # the color given by the user is a string, we need to create the Color
     # instance
     if isinstance(params.settings.background_color, str):
-        params.settings.background_color = agglomerate.main.color. \
+        params.settings.background_color = agglomerate.utils. \
                 Color.from_hex(params.settings.background_color)
 
     # the size given by the user is a string, we need to create the Vector2
@@ -218,7 +191,7 @@ def _process_parameters_settings(params):
     if os.path.splitext(params.settings.output_coordinates_path)[1] == "":
         # add the suggested extension by the format
         chosen_format = \
-                agglomerate.main.format.get_format(params.settings.format)
+                agglomerate.format.get_format(params.settings.format)
 
         params.settings.output_coordinates_path += \
                 "." + params.chosen_format.suggested_extension
@@ -226,85 +199,14 @@ def _process_parameters_settings(params):
     return params
 
 
-#def _process_parameters(sprites_paths, settings):
-    """
-    Creates the sprites list and check the transitory settings given, returns
-    the sprites list and the settings ready for packing
-
-    :param list sprites_paths: a list of path strings, can contain wildcards
-    :param settings: transitory settings instance
-    :return: tuple containing the sprites list and the settings instance
-    """
-"""    # Match every path given, some can contain wildcards
-    matching_paths = []
-    for s in sprites_paths:
-        matching_paths.extend(_get_matching_files(s))
-
-    if not matching_paths:
-        sys.exit("Could not find any image")
-
-    # print found images
-    print("Found images:")
-    for p in matching_paths:
-        print("    ", p)
-
-    # create sprites
-    sprites = [agglomerate.main.items.Sprite(path) for path in matching_paths]
-
-
-    # Check settings
-
-    # the color given by the user is a string, we need to create the Color
-    # instance
-    if isinstance(settings.background_color, str):
-        settings.background_color = \
-                agglomerate.main.color.Color.from_hex(settings.background_color)
-
-    # the size given by the user is a string, we need to create the Vector2
-    if isinstance(settings.size, str):
-        settings.size = _parse_size(settings.size)
-
-    if settings.output_sheet_format != None:
-        # check the given format, the format shouldn't start with a dot
-        if settings.output_sheet_format[0] == ".":
-            settings.output_sheet_format = settings.output_sheet_format[1:]
-
-    # if output_sheet_path doesn't have extension
-    if os.path.splitext(settings.output_sheet_path)[1] == "":
-        # if user didn't say what extension to use
-        if settings.output_sheet_format == None:
-            # set image format to png
-            settings.output_sheet_format = "png"
-
-        # add extension to output_sheet_path
-        settings.output_sheet_path += "." + settings.output_sheet_format
-
-    # if output_coordinates_path doesn't have extension
-    if os.path.splitext(settings.output_coordinates_path)[1] == "":
-        # add the suggested extension by the format
-        chosen_format = \
-                agglomerate.main.format.get_format(settings.format)
-
-        settings.output_coordinates_path += "." + \
-                chosen_format.suggested_extension
-
-
-    return (sprites, settings)
-"""
-
-
 def _create_parameters_file(path):
     """
-    Saves an example json file where the sprites and the settings are
-    specified.
-
-    The json file consists of a root object that contains a sprites array of
-    strings and a settings object
+    Saves an example parameters json file where the sprites and the settings
+    are specified.
 
     :param str path: path where to save file
     """
-    settings = agglomerate.main.settings.SheetSettings(
-            _default_algorithm, _default_format)
+    settings = agglomerate.SheetSettings(_default_algorithm, _default_format)
 
     settings_dict = settings.to_dict()
 
@@ -324,18 +226,17 @@ def _create_parameters_file(path):
 
 def _parse_size(string):
     """
-    Interpret given size string:
+    Interprets a size string and returns a Vector2.
 
     String must be for example 100x200, 530x, x200 or auto. No number means
     auto
 
     :param str string:
-    :return: sheet size
-    :rtype: classes.Vector2
+    :return: size Vector2
     """
     if string.find("x") < 0:
         if string == "auto":
-            return agglomerate.main.math.Vector2("auto", "auto")
+            return agglomerate.math.Vector2("auto", "auto")
         else:
             print("Invalid size " + string)
             sys.exit()
@@ -365,7 +266,7 @@ def _parse_size(string):
                     print("Invalid size " + string)
                     sys.exit()
 
-            return agglomerate.main.math.Vector2(x, y)
+            return agglomerate.math.Vector2(x, y)
 
 
 def _parse_group(dictionary, is_params):
@@ -376,7 +277,7 @@ def _parse_group(dictionary, is_params):
     The structure of a parameters dictionary is as follows::
 
         parameters (dict)
-        ├─ items (list)
+                ├─ items (list)
         |  ├─ group1 (dict)
         |  |  ├─ items (list)
         |  |  └─ settings (dict)
@@ -387,7 +288,7 @@ def _parse_group(dictionary, is_params):
         |  ├─ sprite2 (string)
         |  └─ ...
         |
-        └─ settings
+                └─ settings
 
     :param dict dictionary: dictionary that represents the group
     :param bool is_params: True if the group is a parameters group
@@ -397,9 +298,9 @@ def _parse_group(dictionary, is_params):
     items = []
     for i in raw_items:
         if isinstance(i, str): # means that i is a sprite path
-            sprites_paths = agglomerate.main.util.get_matching_paths(i)
+            sprites_paths = agglomerate.util.get_matching_paths(i)
             for p in sprites_paths:
-                items.append(agglomerate.main.items.Sprite(p))
+                items.append(agglomerate.Sprite(p))
 
         else: # means that i is a dictionary i.e. a group
             items.append(_parse_group(i, False))
@@ -407,12 +308,10 @@ def _parse_group(dictionary, is_params):
     settings_dict = dictionary["settings"]
 
     if is_params:
-        settings = agglomerate.main.settings. \
-                SheetSettings.from_dict(settings_dict)
+        settings = agglomerate.SheetSettings.from_dict(settings_dict)
 
-        return agglomerate.main.parameters.Parameters(items, settings)
+        return agglomerate.Parameters(items, settings)
     else:
-        settings = agglomerate.main.settings. \
-                Settings.from_dict(settings_dict)
+        settings = agglomerate.Settings.from_dict(settings_dict)
 
-        return agglomerate.main.items.Group(items, settings)
+        return agglomerate.Group(items, settings)

@@ -1,8 +1,8 @@
-import agglomerate.main.algorithm
-from agglomerate.main.math import Vector2
+import agglomerate
+from agglomerate.math import Vector2
 
 
-class BinaryTreeAlgorithm(agglomerate.main.algorithm.Algorithm):
+class BinaryTreeAlgorithm(agglomerate.Algorithm):
     """
     Simple packing based on the binary tree algorithm
 
